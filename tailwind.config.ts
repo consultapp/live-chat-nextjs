@@ -10,6 +10,8 @@ const config: Config = {
     extend: {
       width: {
         "300": "300px",
+        "400": "400px",
+        "500": "500px",
       },
       maxWidth: {
         "70": "70%",

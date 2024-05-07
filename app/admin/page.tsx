@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Chat from "@/components/Chat/Chat";
+import USER_ROLE from "@/fixtures/USER_ROLE";
 
 export default function AdminPAge() {
   const [chatId, setChatId] = useState(1);
@@ -26,7 +27,7 @@ export default function AdminPAge() {
           Chat2
         </button>
       </aside>
-      <Chat chatId={chatId} />
+      <Chat chatId={chatId} role={USER_ROLE.manager} />
     </section>
   );
 }
