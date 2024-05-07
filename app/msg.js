@@ -1,3 +1,5 @@
+import USER_ROLE from "@/fixtures/USER_ROLE";
+
 export const messages = [
   {
     chatId: 1,
@@ -7,52 +9,52 @@ export const messages = [
   officiis sapiente vero numquam voluptates quod. Odit, facere.
   Temporibus, natus nobis cumque eius sed, nihil tempora voluptatum
   repudiandae, omnis ipsum iure! Accusantium iste tenetur quos dolore.`,
-    fromAdmin: false,
+    userRole: USER_ROLE.user,
   },
   {
     chatId: 1,
     text: `Message 2 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab molestias eaque rem, esse beatae sapiente nisi iste labore.  Velit, pariatur magni! Illo facilis minima repellat laboriosam magni quod at eius!`,
-    fromAdmin: true,
+    userRole: USER_ROLE.manager,
   },
   {
     chatId: 1,
     text: `Message 3 Lorem ipsum dolor sit amet.`,
-    fromAdmin: false,
+    userRole: USER_ROLE.user,
   },
   {
     chatId: 1,
     text: `Message 4 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores facilis architecto facere beatae quo voluptas odio atque fugiat iste recusandae. Culpa at deserunt fuga amet dolorem modi aperiam eligendi temporibus!`,
-    fromAdmin: true,
+    userRole: USER_ROLE.manager,
   },
   {
     chatId: 1,
     text: `Message 2 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab molestias eaque rem, esse beatae sapiente nisi iste labore.  Velit, pariatur magni! Illo facilis minima repellat laboriosam magni quod at eius!`,
-    fromAdmin: true,
+    userRole: USER_ROLE.manager,
   },
   {
     chatId: 1,
     text: `Message 3 Lorem ipsum dolor sit amet.`,
-    fromAdmin: false,
+    userRole: USER_ROLE.user,
   },
   {
     chatId: 1,
     text: `Message 4 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores facilis architecto facere beatae quo voluptas odio atque fugiat iste recusandae. Culpa at deserunt fuga amet dolorem modi aperiam eligendi temporibus!`,
-    fromAdmin: true,
+    userRole: USER_ROLE.manager,
   },
   {
     chatId: 1,
     text: `Message 2 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab molestias eaque rem, esse beatae sapiente nisi iste labore.  Velit, pariatur magni! Illo facilis minima repellat laboriosam magni quod at eius!`,
-    fromAdmin: true,
+    userRole: USER_ROLE.manager,
   },
   {
     chatId: 1,
     text: `Message 3 Lorem ipsum dolor sit amet.`,
-    fromAdmin: false,
+    userRole: USER_ROLE.user,
   },
   {
     chatId: 1,
     text: `Message 4 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores facilis architecto facere beatae quo voluptas odio atque fugiat iste recusandae. Culpa at deserunt fuga amet dolorem modi aperiam eligendi temporibus!`,
-    fromAdmin: true,
+    userRole: USER_ROLE.manager,
   },
   {
     chatId: 2,
@@ -60,17 +62,17 @@ export const messages = [
   Iusto accusamus impedit veniam ex! Veritatis veniam illum aliquam
   dignissimos.  Nihil tempora voluptatum
   repudiandae, omnis ipsum iure! Accusantium iste tenetur quos dolore.`,
-    fromAdmin: false,
+    userRole: USER_ROLE.user,
   },
 
   {
     chatId: 2,
     text: `Message 3 Lorem ipsum dolor sit amet.`,
-    fromAdmin: true,
+    userRole: USER_ROLE.manager,
   },
   {
     chatId: 2,
     text: `Message 4 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores facilis architecto facere beatae quo voluptas odio atque fugiat iste recusandae.!`,
-    fromAdmin: true,
+    userRole: USER_ROLE.manager,
   },
 ];
