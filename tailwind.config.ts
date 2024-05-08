@@ -17,6 +17,9 @@ const config: Config = {
         "70": "70%",
         half1: "calc(100% - 300px)",
       },
+      maxHeight: {
+        screen1: "calc(100vh - 2.5rem)",
+      },
     },
   },
   plugins: [],

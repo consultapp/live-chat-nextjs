@@ -5,9 +5,8 @@ type Props = { setChatId: (id: number) => void };
 export default function ChatList({ setChatId }: Props) {
   return (
     <>
-      {" "}
       <button
-        className="m-2 bg-gray-600 rounded p-2 text-left"
+        className="m-2 bg-gray-600 rounded p-2 text-left text-yellow-400 font-bold"
         onClick={() => {
           setChatId(1);
         }}

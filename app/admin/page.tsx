@@ -2,30 +2,16 @@
 import { useState } from "react";
 import Chat from "@/components/Chat/Chat";
 import USER_ROLE from "@/fixtures/USER_ROLE";
+import ChatList from "@/components/ChatList/ChatList";
 
 export default function AdminPAge() {
   const [chatId, setChatId] = useState(1);
 
   return (
     <section className="flex flex-row bg-white text-black min-h-screen">
-      <aside className="bg-gray-800 text-white flex flex-col gap-1 w-300">
-        <h1 className=" self-center">Chats</h1>
-        <button
-          className="m-2 bg-gray-600 rounded p-2 text-left"
-          onClick={() => {
-            setChatId(1);
-          }}
-        >
-          Chat1
-        </button>
-        <button
-          className="m-2 bg-gray-600 rounded p-2 text-left"
-          onClick={() => {
-            setChatId(2);
-          }}
-        >
-          Chat2
-        </button>
+      <aside className="bg-gray-800 text-white flex flex-col gap-1 w-300 py-4">
+        <h1 className="self-center font-bold text-xl">Chats</h1>
+        <ChatList setChatId={setChatId} />
       </aside>
       <Chat chatId={chatId} role={USER_ROLE.manager} />
     </section>
