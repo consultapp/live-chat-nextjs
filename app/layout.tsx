@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
+import ChatProvider from "./ChatContext/ChatProvider";
 
 const opensans = Open_Sans({ subsets: ["latin"] });
 
@@ -16,7 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={opensans.className}>{children}</body>
+      <ChatProvider>
+        <body className={opensans.className}>{children}</body>
+      </ChatProvider>
     </html>
   );
 }
