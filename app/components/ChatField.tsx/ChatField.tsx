@@ -1,4 +1,4 @@
-import { ChatContext } from "@/ChatContext";
+import { ChatContext } from "@/context/ChatContext";
 import USER_ROLE from "@/fixtures/USER_ROLE";
 import { messages } from "@/msg";
 import React, { useContext, useEffect, useRef } from "react";

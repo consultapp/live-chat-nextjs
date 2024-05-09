@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import USER_ROLE from "@/fixtures/USER_ROLE";
 import ChatField from "../ChatField.tsx/ChatField";
 import ChatNewForm from "../ChatNewForm/ChatNewForm";
-import { ChatContext } from "@/ChatContext";
+import { ChatContext } from "@/context/ChatContext";
 
 type Props = { role?: keyof typeof USER_ROLE };
 

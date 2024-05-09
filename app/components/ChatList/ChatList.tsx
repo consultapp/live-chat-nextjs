@@ -1,14 +1,17 @@
-import React from "react";
+import { ChatContext } from "@/context/ChatContext";
+import React, { useContext } from "react";
 
-type Props = { setChatId: (id: number) => void };
+type Props = {};
 
-export default function ChatList({ setChatId }: Props) {
+export default function ChatList({}: Props) {
+  const { setChatId } = useContext(ChatContext);
+
   return (
     <>
       <button
         className="m-2 bg-gray-600 rounded p-2 text-left text-yellow-400 font-bold"
         onClick={() => {
-          setChatId(1);
+          if (setChatId) setChatId(1);
         }}
       >
         Chat1
@@ -16,7 +19,7 @@ export default function ChatList({ setChatId }: Props) {
       <button
         className="m-2 bg-gray-600 rounded p-2 text-left"
         onClick={() => {
-          setChatId(2);
+          if (setChatId) setChatId(2);
         }}
       >
         Chat2
