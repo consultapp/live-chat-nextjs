@@ -57,11 +57,11 @@ export default function ChatNewForm({}: Props) {
             e.preventDefault();
             if (inputRef?.current?.value && formRef?.current) {
               const n = inputRef?.current?.value;
-              if (n.length > 3 && n.length < 15) {
+              if (n.length > 3 && n.length < 30) {
                 formRef.current.requestSubmit();
                 return;
               } else {
-                setError("Имя должно быть от 3 до 15 символов");
+                setError("Имя должно быть от 3 до 30 символов");
                 return;
               }
             }

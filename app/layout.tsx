@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import ChatProvider from "./context/ChatContext/ChatProvider";
 import Script from "next/script";
+import MessagesProvider from "./context/MessageContext/MessageContext";
 
 const opensans = Open_Sans({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`}
       /> */}
       <ChatProvider>
-        <body className={opensans.className}>{children}</body>
+        <MessagesProvider>
+          <body className={opensans.className}>{children}</body>
+        </MessagesProvider>
       </ChatProvider>
     </html>
   );
