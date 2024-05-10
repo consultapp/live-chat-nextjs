@@ -18,10 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Script
+      {/* <Script
         id="recaptcha"
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`}
-      />
+      /> */}
       <ChatProvider>
         <body className={opensans.className}>{children}</body>
       </ChatProvider>

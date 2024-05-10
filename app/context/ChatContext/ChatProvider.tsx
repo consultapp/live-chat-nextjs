@@ -5,10 +5,10 @@ import { ChatContext } from ".";
 type Props = { children: React.ReactElement };
 
 export default function ChatProvider({ children }: Props) {
-  const [chatId, setChatId] = useState(0);
+  const [chatSlug, setChatSlug] = useState(0);
 
   return (
-    <ChatContext.Provider value={{ chatId, setChatId }}>
+    <ChatContext.Provider value={{ chatSlug, setChatSlug }}>
       {children}
     </ChatContext.Provider>
   );

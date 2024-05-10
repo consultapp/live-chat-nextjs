@@ -5,7 +5,7 @@ import USER_ROLE from "@/fixtures/USER_ROLE";
 import ChatList from "@/components/ChatList/ChatList";
 
 export default function AdminPAge() {
-  const [chatId, setChatId] = useState(1);
+  const [chatSlug, setChatSlug] = useState(1);
 
   return (
     <section className="flex flex-row bg-white text-black min-h-screen">

@@ -7,7 +7,7 @@ type Props = { role?: keyof typeof USER_ROLE };
 
 export default function ChatField({ role = USER_ROLE.user }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const { chatId } = useContext(ChatContext);
+  const { chatSlug } = useContext(ChatContext);
 
   useEffect(() => {
     if (ref.current) {
@@ -17,7 +17,7 @@ export default function ChatField({ role = USER_ROLE.user }: Props) {
       });
       console.dir(ref.current);
     }
-  }, [chatId]);
+  }, [chatSlug]);
 
   return (
     <>
@@ -26,7 +26,7 @@ export default function ChatField({ role = USER_ROLE.user }: Props) {
         ref={ref}
       >
         {messages
-          .filter((item) => item.chatId === chatId)
+          .filter((item) => item.chatSlug === chatSlug)
           .map((item, i) => (
             <div
               key={i}
@@ -40,7 +40,7 @@ export default function ChatField({ role = USER_ROLE.user }: Props) {
                   item.userRole === role && "right-0"
                 } `}
               >
-                {item.chatId}
+                {item.chatSlug}
               </div>
             </div>
           ))}
