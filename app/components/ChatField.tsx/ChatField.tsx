@@ -3,7 +3,6 @@ import { ChatContext } from "@/context/ChatContext";
 import React, { useContext, useEffect, useRef } from "react";
 import { useFormState } from "react-dom";
 import ChatMessages from "../ChatMessages/ChatMessages";
-import USER_TYPE from "@/fixtures/USER_TYPE";
 import { updateMessages } from "@/functions/updateMessages";
 import {
   MessageContext,
