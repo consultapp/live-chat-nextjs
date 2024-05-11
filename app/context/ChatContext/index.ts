@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 interface IInitialChatContext {
   chatSlug: string;
-  setChatSlug?: React.Dispatch<React.SetStateAction<number>>;
+  setChatSlug?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const initialChatContext: IInitialChatContext = {

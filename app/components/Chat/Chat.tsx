@@ -1,18 +1,66 @@
-import React, { useContext } from "react";
-import USER_ROLE from "@/fixtures/USER_ROLE";
+"use client";
+import React, { useContext, useEffect, useLayoutEffect } from "react";
 import ChatField from "../ChatField.tsx/ChatField";
 import ChatNewForm from "../ChatNewForm/ChatNewForm";
 import { ChatContext } from "@/context/ChatContext";
+import USER_TYPE from "@/fixtures/USER_TYPE";
+import {
+  MessageContext,
+  MessageContextDispatch,
+} from "@/context/MessageContext";
+import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
 
-type Props = { role?: keyof typeof USER_ROLE; noNewChat?: boolean };
+type Props = { role?: keyof typeof USER_TYPE; noNewChat?: boolean };
 
-export default function Chat({ role = USER_ROLE.user }: Props) {
-  const { chatSlug } = useContext(ChatContext);
+async function loadMessages(chatSlug: string) {
+  const res = fetch(`/api/messages?chatSlug=${chatSlug}`);
+  return (await res).json();
+}
+
+export default function Chat({ role = USER_TYPE.user }: Props) {
+  const { chatSlug, setChatSlug } = useContext(ChatContext);
+
+  const dispatch = useContext(MessageContextDispatch);
+  const { messages, loading } = useContext(MessageContext);
+
+  console.log("Chat: messages, loading ", messages, loading);
+
+  useEffect(() => {
+    const slug = window.localStorage.getItem("chatSlug") || "";
+    if (setChatSlug) setChatSlug(slug);
+
+    if (!messages.length && slug) {
+      console.log("startLoading");
+      dispatch({ type: "startLoading" });
+      loadMessages(slug).then((data) => {
+        dispatch({ type: "saveMessages", payload: data });
+      });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (loading === LOADING_STATUS.pending || loading === LOADING_STATUS.idle)
+    return (
+      <main
+        className={`flex bg-gray-800 h-screen p-3 ${
+          role === USER_TYPE.user
+            ? "w-500  border-gray-500"
+            : "max-w-half1 w-full "
+        }`}
+      >
+        <div
+          className={`flex flex-col p-2 flex-grow gap-2 px-2 bg-blue-50 rounded-xl w-full`}
+        >
+          {"Loading"}
+        </div>
+      </main>
+    );
 
   return (
     <main
       className={`flex bg-gray-800 h-screen p-3 ${
-        role === USER_ROLE.user
+        role === USER_TYPE.user
           ? "w-500  border-gray-500"
           : "max-w-half1 w-full "
       }`}
@@ -20,7 +68,7 @@ export default function Chat({ role = USER_ROLE.user }: Props) {
       <div
         className={`flex flex-col p-2 flex-grow gap-2 px-2 bg-blue-50 rounded-xl w-full`}
       >
-        {chatSlug ? <ChatField /> : role === USER_ROLE.user && <ChatNewForm />}
+        {chatSlug ? <ChatField /> : role === USER_TYPE.user && <ChatNewForm />}
       </div>
     </main>
   );

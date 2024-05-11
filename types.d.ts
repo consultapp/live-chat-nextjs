@@ -14,11 +14,9 @@ export interface IChat {
 
 interface IMessage {
   id: number;
-  attributes: {
-    text: string;
-    userType: keyof typeof USER_ROLE;
-    createdAt: Date;
-    updatedAt: Date;
-    chatSlug?: string;
-  };
+  text: string;
+  userType: keyof typeof USER_TYPE;
+  createdAt: Date;
+  updatedAt: Date;
+  chatSlug?: string;
 }

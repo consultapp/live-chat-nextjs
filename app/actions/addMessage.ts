@@ -1,6 +1,6 @@
 "use server";
 
-import USER_ROLE from "@/fixtures/USER_ROLE";
+import USER_TYPE from "@/fixtures/USER_TYPE";
 
 export async function addMessage(previousState: any, formData: FormData) {
   const reg = /[^a-zA-ZА-Яа-я0-9.,!\- ]/g;
@@ -11,7 +11,7 @@ export async function addMessage(previousState: any, formData: FormData) {
   );
   const userType =
     ((formData.get("userType") ?? "") as string).replaceAll(reg, "") ||
-    USER_ROLE.user;
+    USER_TYPE.user;
 
   const res = await fetch(process.env.STRAPI_SERVER + "/api/messages/", {
     method: "POST",

@@ -1,12 +1,20 @@
-import { messages } from "@/msg";
-import React, { useEffect, useRef } from "react";
+import { ChatContext } from "@/context/ChatContext";
+import {
+  MessageContext,
+  MessageContextDispatch,
+} from "@/context/MessageContext";
+import USER_TYPE from "@/fixtures/USER_TYPE";
+import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
 
-type Props = {};
+type Props = { role: string };
 
-export default function ChatMessages({}: Props) {
+export default function ChatMessages({ role = USER_TYPE.user }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const { messages, loading } = useContext(MessageContext);
 
-  useEffect(() => {
+  console.log("ChatMessages:", messages, loading);
+
+  useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTo({
         top: ref.current.scrollHeight,
@@ -16,26 +24,32 @@ export default function ChatMessages({}: Props) {
   }, []);
 
   return (
-    <div className="flex flex-col flex-grow gap-8 overflow-y-scroll " ref={ref}>
-      {messages
-        .filter((item) => item.chatSlug === chatSlug)
-        .map((item, i) => (
+    <div
+      className="flex flex-col flex-grow gap-10 overflow-y-scroll "
+      ref={ref}
+    >
+      {messages.map((item) => (
+        <div
+          key={item.id}
+          className={`cursor-pointer relative flex flex-col mx-4`}
+        >
           <div
-            key={i}
-            className={`cursor-pointer relative border bg-white border-gray-300 rounded p-2 max-w-70 w-fit text-balance scroll-m-1  mx-4
-        ${item.userRole === role && "self-end"}
+            className={`cursor-pointer  border bg-white border-gray-300 rounded p-2 max-w-70 w-fit text-balance scroll-m-1  
+        ${item.userType === role && "self-end"}
         `}
           >
             {item.text}
             <div
-              className={`absolute -bottom-6 ${
-                item.userRole === role && "right-0"
+              className={`absolute text-sm -bottom-5 ${
+                item.userType === role && "right-1"
               } `}
             >
-              {item.chatSlug}
+              {new Date(item.createdAt).toLocaleTimeString()}&nbsp;
+              {new Date(item.createdAt).toLocaleDateString()}
             </div>
           </div>
-        ))}
+        </div>
+      ))}
     </div>
   );
 }

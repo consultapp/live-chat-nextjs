@@ -1,23 +1,24 @@
 import { createContext } from "react";
-import USER_ROLE from "@/fixtures/USER_ROLE";
 import { IMessage } from "../../../types";
+import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
 
-interface IInitialMessageContext {
+export interface IMessageContext {
   messages: IMessage[];
-  lastDate: Date | null;
-  firstDate: Date | null;
-  userType: keyof typeof USER_ROLE;
+  loading: keyof typeof LOADING_STATUS;
 }
 
-export const initialMessageContext: IInitialMessageContext = {
+export const initialMessageContext: IMessageContext = {
   messages: [],
-  lastDate: null,
-  firstDate: null,
-  userType: USER_ROLE.user,
+  loading: LOADING_STATUS.idle,
 };
 
-export const MessageContext = createContext(initialMessageContext);
-
-export const MessageContextDispatch = createContext(
-  ({ type, payload }: { type: string; payload: any }) => {}
+export const MessageContext = createContext<IMessageContext>(
+  initialMessageContext
 );
+
+export const MessageContextDispatch = createContext<
+  React.Dispatch<{
+    type: string;
+    payload?: any;
+  }>
+>(() => {});

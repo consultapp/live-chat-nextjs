@@ -1,20 +1,19 @@
 import { addMessage } from "@/actions/addMessage";
 import { ChatContext } from "@/context/ChatContext";
-import USER_ROLE from "@/fixtures/USER_ROLE";
+import USER_TYPE from "@/fixtures/USER_TYPE";
 import { messages } from "@/msg";
 import React, { useContext, useEffect, useRef } from "react";
 import { useFormState } from "react-dom";
 import ChatMessages from "../ChatMessages/ChatMessages";
 
-type Props = { role?: keyof typeof USER_ROLE };
+type Props = { role?: keyof typeof USER_TYPE };
 
-export default function ChatField({ role = USER_ROLE.user }: Props) {
+export default function ChatField({ role = USER_TYPE.user }: Props) {
   const [state, formAction, isPending] = useFormState(addMessage, null);
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { chatSlug } = useContext(ChatContext);
-
 
   return (
     <>

@@ -13,20 +13,12 @@ export default function ChatNewForm({}: Props) {
 
   const { setChatSlug } = useContext(ChatContext);
 
-  // function onClick(e) {
-  //   e.preventDefault();
-  //   grecaptcha.ready(function() {
-  //     grecaptcha.execute('reCAPTCHA_site_key', {action: 'submit'}).then(function(token) {
-  //         // Add your logic to submit to your backend server here.
-  //     });
-  //   });
-  // }
-
   useLayoutEffect(() => {
     {
       if (setChatSlug) {
         if (state && !state.error && state.chatSlug) {
           setChatSlug(state.chatSlug);
+          window.localStorage.setItem("chatSlug", state.chatSlug);
         } else if (state?.error) {
           setError("Ошибка создания чата. Свяжитесь с администратором.");
         }

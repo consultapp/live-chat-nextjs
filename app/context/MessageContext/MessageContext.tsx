@@ -1,5 +1,5 @@
 "use client";
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import {
   MessageContext,
   MessageContextDispatch,
@@ -13,10 +13,10 @@ export default function MessagesProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialMessageContext);
 
   return (
-    <MessageContextDispatch.Provider value={dispatch}>
-      <MessageContext.Provider value={state}>
+    <MessageContext.Provider value={state}>
+      <MessageContextDispatch.Provider value={dispatch}>
         {children}
-      </MessageContext.Provider>
-    </MessageContextDispatch.Provider>
+      </MessageContextDispatch.Provider>
+    </MessageContext.Provider>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Chat from "@/components/Chat/Chat";
-import USER_ROLE from "@/fixtures/USER_ROLE";
+import USER_TYPE from "@/fixtures/USER_TYPE";
 import ChatList from "@/components/ChatList/ChatList";
 
 export default function AdminPAge() {
@@ -13,7 +13,7 @@ export default function AdminPAge() {
         <h1 className="self-center font-bold text-xl">Chats</h1>
         <ChatList />
       </aside>
-      <Chat role={USER_ROLE.manager} />
+      <Chat role={USER_TYPE.manager} />
     </section>
   );
 }
