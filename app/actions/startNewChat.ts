@@ -4,8 +4,7 @@ import { authAsManager } from "./authAsManager";
 import { IChat } from "../../types";
 
 export async function startNewChat(previousState: IChat, formData: FormData) {
-  const res = await authAsManager();
-  const data = await JSON.parse(res);
+  const data = await authAsManager();
 
   if (data && data.token) {
     const reg = /[^a-zA-ZА-Яа-я0-9 ]/g;

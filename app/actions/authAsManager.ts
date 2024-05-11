@@ -15,6 +15,6 @@ export async function authAsManager() {
   const data = await res.json();
 
   if (data && data.jwt) {
-    return JSON.stringify({ token: data.jwt });
-  } else return JSON.stringify({ error: "Auth Error" });
+    return { token: data.jwt };
+  } else return { error: "Auth Error" };
 }
