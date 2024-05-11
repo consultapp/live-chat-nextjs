@@ -46,21 +46,23 @@ export default function ChatField({}: Props) {
     <>
       <ChatMessages />
       <form
-        className="flex flex-row bg-gray p-2 border gap-2 bg-white mx-4 rounded"
+        className="flex flex-row  p-2  gap-2 mx-4 "
         action={formAction}
         ref={formRef}
       >
         <input
           type="text"
           name="text"
-          className="flex-grow border-collapse "
+          className="flex-grow px-2  bg-white"
           disabled={isPending}
           ref={inputRef}
+          placeholder="Введите текст"
         />
         <input type="hidden" name="chatSlug" value={chatSlug} />
         <input type="hidden" name="userType" value={user.userType} />
         <button
           disabled={isPending}
+          className="btn"
           onClick={(e) => {
             e.preventDefault();
             if (inputRef?.current?.value && formRef?.current) {

@@ -16,9 +16,7 @@ export default function LoginForm({}: Props) {
         </label>
         <input type="text" placeholder="E-mail" className="p-1 rounded" />
         <input type="password" placeholder="Пароль" className="p-1 rounded" />
-        <button className="btn bg-gray-800 text-white rounded p-2">
-          Войти
-        </button>
+        <button className="btn">Войти</button>
       </form>
     </section>
   );

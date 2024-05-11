@@ -1,6 +1,6 @@
 "use server";
 
-export async function getMessages(getParams: string) {
+export async function getMessagesAction(getParams: string) {
   const res = await fetch(
     `${process.env.STRAPI_SERVER}/api/messages/?${getParams}`,
     {

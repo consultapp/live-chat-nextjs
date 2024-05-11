@@ -27,3 +27,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.btn {
+  @apply bg-gray-800 hover:bg-gray-700 text-white rounded py-2 px-4 disabled:bg-gray-300;
+}
