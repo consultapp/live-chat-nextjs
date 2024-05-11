@@ -1,12 +1,8 @@
-import { ChatContext } from "@/context/ChatContext";
-import {
-  MessageContext,
-  MessageContextDispatch,
-} from "@/context/MessageContext";
+import { MessageContext } from "@/context/MessageContext";
 import USER_TYPE from "@/fixtures/USER_TYPE";
 import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
 
-type Props = { role: string };
+type Props = { role?: string };
 
 export default function ChatMessages({ role = USER_TYPE.user }: Props) {
   const ref = useRef<HTMLDivElement>(null);
@@ -21,7 +17,7 @@ export default function ChatMessages({ role = USER_TYPE.user }: Props) {
       });
       console.dir(ref.current);
     }
-  }, []);
+  }, [messages]);
 
   return (
     <div
@@ -34,7 +30,7 @@ export default function ChatMessages({ role = USER_TYPE.user }: Props) {
           className={`cursor-pointer relative flex flex-col mx-4`}
         >
           <div
-            className={`cursor-pointer  border bg-white border-gray-300 rounded p-2 max-w-70 w-fit text-balance scroll-m-1  
+            className={`cursor-pointer overflow-hidden break-words border bg-white border-gray-300 rounded p-2 max-w-70 w-fit text-balance scroll-m-1  
         ${item.userType === role && "self-end"}
         `}
           >

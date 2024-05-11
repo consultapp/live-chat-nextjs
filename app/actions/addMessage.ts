@@ -2,7 +2,15 @@
 
 import USER_TYPE from "@/fixtures/USER_TYPE";
 
-export async function addMessage(previousState: any, formData: FormData) {
+export interface IAddMessageState {
+  data?: any;
+  error?: string;
+}
+
+export async function addMessage(
+  previousState: IAddMessageState,
+  formData: FormData
+) {
   const reg = /[^a-zA-ZА-Яа-я0-9.,!\- ]/g;
   const text = ((formData.get("text") ?? "") as string).replaceAll(reg, "");
   const chatSlug = ((formData.get("chatSlug") ?? "") as string).replaceAll(
@@ -28,9 +36,8 @@ export async function addMessage(previousState: any, formData: FormData) {
   });
 
   const data = await res.json();
-  console.log("addMessage data", data);
 
   if (data) {
-    return JSON.stringify({});
-  } else return JSON.stringify({ error: "Auth Error" });
+    return data;
+  } else return { error: "Auth Error" };
 }

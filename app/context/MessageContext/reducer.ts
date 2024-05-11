@@ -7,10 +7,8 @@ export function reducer(
 ) {
   switch (type) {
     case "saveMessages":
-      const { data } = payload;
-
       return {
-        messages: data.map(
+        messages: payload.data.map(
           ({ id, attributes }: { id: number; attributes: any }) => ({
             id,
             ...attributes,
@@ -21,6 +19,22 @@ export function reducer(
 
     case "startLoading":
       return { ...state, loading: LOADING_STATUS.pending };
+
+    case "updateMessages":
+      if (payload.data.length) console.log("payload.data", payload.data);
+      return {
+        messages: [
+          ...state.messages,
+          ...payload.data.map(
+            ({ id, attributes }: { id: number; attributes: any }) => ({
+              id,
+              ...attributes,
+            })
+          ),
+        ],
+        loading: LOADING_STATUS.fulfilled,
+      };
+      return { ...state, loading: LOADING_STATUS.fulfilled };
 
     default:
       break;

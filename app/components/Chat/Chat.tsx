@@ -9,13 +9,9 @@ import {
   MessageContextDispatch,
 } from "@/context/MessageContext";
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
+import { loadMessages } from "@/functions/loadMessages";
 
 type Props = { role?: keyof typeof USER_TYPE; noNewChat?: boolean };
-
-async function loadMessages(chatSlug: string) {
-  const res = fetch(`/api/messages?chatSlug=${chatSlug}`);
-  return (await res).json();
-}
 
 export default function Chat({ role = USER_TYPE.user }: Props) {
   const { chatSlug, setChatSlug } = useContext(ChatContext);
@@ -40,7 +36,10 @@ export default function Chat({ role = USER_TYPE.user }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading === LOADING_STATUS.pending || loading === LOADING_STATUS.idle)
+  if (
+    loading === LOADING_STATUS.pending ||
+    (loading === LOADING_STATUS.idle && chatSlug)
+  )
     return (
       <main
         className={`flex bg-gray-800 h-screen p-3 ${
