@@ -1,12 +1,14 @@
 import { MessageContext } from "@/context/MessageContext";
+import { UserContext } from "@/context/UserContext";
 import USER_TYPE from "@/fixtures/USER_TYPE";
 import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
 
-type Props = { role?: string };
+type Props = {};
 
-export default function ChatMessages({ role = USER_TYPE.user }: Props) {
+export default function ChatMessages({}: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const { messages, loading } = useContext(MessageContext);
+  const { user } = useContext(UserContext);
 
   console.log("ChatMessages:", messages, loading);
 
@@ -31,13 +33,13 @@ export default function ChatMessages({ role = USER_TYPE.user }: Props) {
         >
           <div
             className={`cursor-pointer overflow-hidden break-words border bg-white border-gray-300 rounded p-2 max-w-70 w-fit text-balance scroll-m-1  
-        ${item.userType === role && "self-end"}
+        ${item.userType === user.userType && "self-end"}
         `}
           >
             {item.text}
             <div
               className={`absolute text-sm -bottom-5 ${
-                item.userType === role && "right-1"
+                item.userType === user.userType && "right-1"
               } `}
             >
               {new Date(item.createdAt).toLocaleTimeString()}&nbsp;

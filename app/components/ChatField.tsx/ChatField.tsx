@@ -10,16 +10,18 @@ import {
   MessageContextDispatch,
 } from "@/context/MessageContext";
 import { loadMessages } from "@/functions/loadMessages";
+import { UserContext } from "@/context/UserContext";
 
-type Props = { role?: keyof typeof USER_TYPE };
+type Props = {};
 
-export default function ChatField({ role = USER_TYPE.user }: Props) {
+export default function ChatField({}: Props) {
   const [state, formAction, isPending] = useFormState(addMessage, {});
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { chatSlug } = useContext(ChatContext);
   const { messages } = useContext(MessageContext);
+  const { user } = useContext(UserContext);
   const dispatch = useContext(MessageContextDispatch);
 
   useEffect(() => {
@@ -56,6 +58,7 @@ export default function ChatField({ role = USER_TYPE.user }: Props) {
           ref={inputRef}
         />
         <input type="hidden" name="chatSlug" value={chatSlug} />
+        <input type="hidden" name="userType" value={user.userType} />
         <button
           disabled={isPending}
           onClick={(e) => {
