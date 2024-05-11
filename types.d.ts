@@ -1,3 +1,5 @@
+import USER_TYPE from "@/fixtures/USER_TYPE";
+
 export interface IChat {
   data?: {
     id: number;
@@ -19,4 +21,8 @@ interface IMessage {
   createdAt: Date;
   updatedAt: Date;
   chatSlug?: string;
+}
+
+interface IUser {
+  userType: keyof typeof USER_TYPE;
 }

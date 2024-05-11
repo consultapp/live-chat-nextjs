@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useLayoutEffect } from "react";
+import React, { ReactElement, useContext, useEffect } from "react";
 import ChatField from "../ChatField.tsx/ChatField";
 import ChatNewForm from "../ChatNewForm/ChatNewForm";
 import { ChatContext } from "@/context/ChatContext";
@@ -10,14 +10,16 @@ import {
 } from "@/context/MessageContext";
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
 import { loadMessages } from "@/functions/loadMessages";
+import { UserContext } from "@/context/UserContext";
 
-type Props = { role?: keyof typeof USER_TYPE; noNewChat?: boolean };
+type Props = {};
 
-export default function Chat({ role = USER_TYPE.user }: Props) {
+export default function Chat({}: Props) {
   const { chatSlug, setChatSlug } = useContext(ChatContext);
 
   const dispatch = useContext(MessageContextDispatch);
   const { messages, loading } = useContext(MessageContext);
+  const { user } = useContext(UserContext);
 
   console.log("Chat: messages, loading ", messages, loading);
 
@@ -26,13 +28,11 @@ export default function Chat({ role = USER_TYPE.user }: Props) {
     if (setChatSlug) setChatSlug(slug);
 
     if (!messages.length && slug) {
-      console.log("startLoading");
       dispatch({ type: "startLoading" });
       loadMessages(slug).then((data) => {
         dispatch({ type: "saveMessages", payload: data });
       });
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -41,25 +41,29 @@ export default function Chat({ role = USER_TYPE.user }: Props) {
     (loading === LOADING_STATUS.idle && chatSlug)
   )
     return (
-      <main
-        className={`flex bg-gray-800 h-screen p-3 ${
-          role === USER_TYPE.user
-            ? "w-500  border-gray-500"
-            : "max-w-half1 w-full "
-        }`}
-      >
-        <div
-          className={`flex flex-col p-2 flex-grow gap-2 px-2 bg-blue-50 rounded-xl w-full`}
-        >
-          {"Loading"}
-        </div>
-      </main>
+      <Container>
+        <div>Loading</div>
+      </Container>
     );
+
+  return (
+    <Container>
+      {chatSlug ? (
+        <ChatField />
+      ) : (
+        user.userType === USER_TYPE.user && <ChatNewForm />
+      )}
+    </Container>
+  );
+}
+
+function Container({ children }: { children: ReactElement | boolean }) {
+  const { user } = useContext(UserContext);
 
   return (
     <main
       className={`flex bg-gray-800 h-screen p-3 ${
-        role === USER_TYPE.user
+        user.userType === USER_TYPE.user
           ? "w-500  border-gray-500"
           : "max-w-half1 w-full "
       }`}
@@ -67,7 +71,7 @@ export default function Chat({ role = USER_TYPE.user }: Props) {
       <div
         className={`flex flex-col p-2 flex-grow gap-2 px-2 bg-blue-50 rounded-xl w-full`}
       >
-        {chatSlug ? <ChatField /> : role === USER_TYPE.user && <ChatNewForm />}
+        {children}
       </div>
     </main>
   );

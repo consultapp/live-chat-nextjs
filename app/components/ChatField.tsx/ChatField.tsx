@@ -32,7 +32,6 @@ export default function ChatField({ role = USER_TYPE.user }: Props) {
           dispatch({ type: "updateMessages", payload: data });
         });
       } else {
-        dispatch({ type: "startLoading" });
         loadMessages(chatSlug).then((data) => {
           dispatch({ type: "saveMessages", payload: data });
         });

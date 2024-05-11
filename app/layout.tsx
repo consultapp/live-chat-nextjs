@@ -4,6 +4,7 @@ import "./globals.css";
 import ChatProvider from "./context/ChatContext/ChatProvider";
 import Script from "next/script";
 import MessagesProvider from "./context/MessageContext/MessageContext";
+import UserProvider from "./context/UserContext/UserContext";
 
 const opensans = Open_Sans({ subsets: ["latin"] });
 
@@ -23,11 +24,13 @@ export default function RootLayout({
         id="recaptcha"
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`}
       /> */}
-      <ChatProvider>
-        <MessagesProvider>
-          <body className={opensans.className}>{children}</body>
-        </MessagesProvider>
-      </ChatProvider>
+      <UserProvider>
+        <ChatProvider>
+          <MessagesProvider>
+            <body className={opensans.className}>{children}</body>
+          </MessagesProvider>
+        </ChatProvider>
+      </UserProvider>
     </html>
   );
 }
