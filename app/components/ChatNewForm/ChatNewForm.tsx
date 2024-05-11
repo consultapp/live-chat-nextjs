@@ -43,7 +43,7 @@ export default function ChatNewForm({}: Props) {
         />
         <label className=" text-red-800">{error}</label>
         <button
-          className=" "
+          className="btn bg-gray-800 text-white rounded p-2"
           type="submit"
           onClick={(e) => {
             e.preventDefault();

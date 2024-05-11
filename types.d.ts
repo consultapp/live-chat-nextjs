@@ -25,4 +25,5 @@ interface IMessage {
 
 interface IUser {
   userType: keyof typeof USER_TYPE;
+  token?: string;
 }
