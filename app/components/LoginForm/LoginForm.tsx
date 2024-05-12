@@ -1,7 +1,9 @@
 "use client";
 
 import { authAction } from "@/actions/authAction";
-import React, { useEffect } from "react";
+import { UserContext } from "@/context/UserContext";
+import USER_TYPE from "@/fixtures/USER_TYPE";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 
 type Props = {};
@@ -11,8 +13,14 @@ export default function LoginForm({}: Props) {
     token: "",
   });
 
+  const { setUser } = useContext(UserContext);
+
   useEffect(() => {
-    //save token
+    if (state && state.token) {
+      setUser({ userType: USER_TYPE.manager, token: state.token });
+      console.log("first", state.token);
+    }
+
     console.log("LoginForm: state", state);
   }, [state]);
 

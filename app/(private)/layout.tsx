@@ -10,6 +10,7 @@ export default function PrivateLayout({
   children: React.ReactNode;
 }>) {
   const { user } = useContext(UserContext);
+  console.log("PrivateLayout: user", user);
 
   return <>{user.token ? children : <LoginForm />}</>;
 }
