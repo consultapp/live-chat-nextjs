@@ -2,11 +2,14 @@ import { startNewChat } from "@/actions/startNewChat";
 import { ChatContext } from "@/context/ChatContext";
 import { useContext, useLayoutEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
+import { IChat, IChatStrapi } from "../../../types";
 
 type Props = {};
 
 export default function ChatNewForm({}: Props) {
-  const [state, formAction, isPending] = useFormState(startNewChat, null);
+  const [state, formAction, isPending] = useFormState(startNewChat, {
+    chatSlug: "",
+  });
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);

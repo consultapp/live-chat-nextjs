@@ -1,64 +1,24 @@
 "use client";
-import React, { ReactElement, useContext, useEffect } from "react";
-import ChatField from "../ChatField.tsx/ChatField";
+import React, { useContext, useEffect, useLayoutEffect } from "react";
 import ChatNewForm from "../ChatNewForm/ChatNewForm";
 import { ChatContext } from "@/context/ChatContext";
 import USER_TYPE from "@/fixtures/USER_TYPE";
-import {
-  MessageContext,
-  MessageContextDispatch,
-} from "@/context/MessageContext";
-import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
-import { loadMessages } from "@/functions/loadMessages";
+
 import { UserContext } from "@/context/UserContext";
+import ChatSendMessageForm from "../ChatSendMessageForm/ChatSendMessageForm";
+import ChatMessages from "../ChatMessages/ChatMessages";
 
 type Props = {};
 
 export default function Chat({}: Props) {
   const { chatSlug, setChatSlug } = useContext(ChatContext);
-
-  const dispatch = useContext(MessageContextDispatch);
-  const { messages, loading } = useContext(MessageContext);
   const { user } = useContext(UserContext);
 
-  console.log("Chat: messages, loading ", messages, loading);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     const slug = window.localStorage.getItem("chatSlug") || "";
     if (setChatSlug) setChatSlug(slug);
-
-    if (!messages.length && slug) {
-      dispatch({ type: "startLoading" });
-      loadMessages(slug).then((data) => {
-        dispatch({ type: "saveMessages", payload: data });
-      });
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (
-    loading === LOADING_STATUS.pending ||
-    (loading === LOADING_STATUS.idle && chatSlug)
-  )
-    return (
-      <Container>
-        <div>Loading</div>
-      </Container>
-    );
-
-  return (
-    <Container>
-      {chatSlug ? (
-        <ChatField />
-      ) : (
-        user.userType === USER_TYPE.user && <ChatNewForm />
-      )}
-    </Container>
-  );
-}
-
-function Container({ children }: { children: ReactElement | boolean }) {
-  const { user } = useContext(UserContext);
 
   return (
     <main
@@ -71,7 +31,14 @@ function Container({ children }: { children: ReactElement | boolean }) {
       <div
         className={`flex flex-col p-2 flex-grow gap-2 px-2 bg-blue-50 rounded-xl w-full`}
       >
-        {children}
+        {chatSlug ? (
+          <>
+            <ChatMessages />
+            <ChatSendMessageForm />
+          </>
+        ) : (
+          user.userType === USER_TYPE.user && <ChatNewForm />
+        )}
       </div>
     </main>
   );

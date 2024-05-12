@@ -2,7 +2,6 @@ import { addMessage } from "@/actions/addMessage";
 import { ChatContext } from "@/context/ChatContext";
 import React, { useContext, useEffect, useRef } from "react";
 import { useFormState } from "react-dom";
-import ChatMessages from "../ChatMessages/ChatMessages";
 import { updateMessages } from "@/functions/updateMessages";
 import {
   MessageContext,
@@ -13,7 +12,7 @@ import { UserContext } from "@/context/UserContext";
 
 type Props = {};
 
-export default function ChatField({}: Props) {
+export default function ChatSendMessageForm({}: Props) {
   const [state, formAction, isPending] = useFormState(addMessage, {});
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,7 +42,6 @@ export default function ChatField({}: Props) {
 
   return (
     <>
-      <ChatMessages />
       <form
         className="flex flex-row  p-2  gap-2 mx-4 "
         action={formAction}

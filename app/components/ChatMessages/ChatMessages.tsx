@@ -1,16 +1,31 @@
-import { MessageContext } from "@/context/MessageContext";
+import { ChatContext } from "@/context/ChatContext";
+import {
+  MessageContext,
+  MessageContextDispatch,
+} from "@/context/MessageContext";
 import { UserContext } from "@/context/UserContext";
-import USER_TYPE from "@/fixtures/USER_TYPE";
+import { loadMessages } from "@/functions/loadMessages";
 import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
 
 type Props = {};
 
 export default function ChatMessages({}: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const dispatch = useContext(MessageContextDispatch);
+
   const { messages, loading } = useContext(MessageContext);
   const { user } = useContext(UserContext);
+  const { chatSlug } = useContext(ChatContext);
 
-  console.log("ChatMessages:", messages, loading);
+  useEffect(() => {
+    if (!messages.length && chatSlug) {
+      dispatch({ type: "startLoading" });
+      loadMessages(chatSlug).then((data) => {
+        dispatch({ type: "saveMessages", payload: data });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -20,6 +35,11 @@ export default function ChatMessages({}: Props) {
       console.dir(ref.current);
     }
   }, [messages]);
+
+  // if (
+  //   loading === LOADING_STATUS.pending ||
+  //   (loading === LOADING_STATUS.idle && chatSlug)
+  // )
 
   return (
     <div

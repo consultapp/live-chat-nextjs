@@ -1,6 +1,6 @@
 import USER_TYPE from "@/fixtures/USER_TYPE";
 
-export interface IChat {
+export interface IChatStrapi {
   data?: {
     id: number;
     attributes: {
@@ -12,6 +12,11 @@ export interface IChat {
   };
 
   meta?: {};
+}
+
+export interface IChat {
+  chatSlug?: string;
+  error?: string;
 }
 
 interface IMessage {

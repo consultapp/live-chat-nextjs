@@ -1,7 +1,7 @@
 "use server";
 import { randomUUID } from "crypto";
 import { authAsManager } from "./authAsManager";
-import { IChat } from "../../types";
+import { IChat, IChatStrapi } from "../../types";
 
 export async function startNewChat(previousState: IChat, formData: FormData) {
   const data = await authAsManager();
@@ -26,13 +26,13 @@ export async function startNewChat(previousState: IChat, formData: FormData) {
         },
       }),
     });
-    const data1: IChat = await res1.json();
+    const data1: IChatStrapi = await res1.json();
     if (data1 && data1.data) {
       return { chatSlug: data1.data.attributes.slug };
     } else {
       return { error: "New Chat init error" };
     }
   } else {
-    return data;
+    return { error: "New Chat init error. Auth." };
   }
 }
