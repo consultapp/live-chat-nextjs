@@ -28,7 +28,7 @@ export default function LoginForm({}: Props) {
     <section className="flex flex-row bg-gray-800 min-h-screen justify-center items-center">
       <form
         action={formAction}
-        className="flex flex-col gap-4 bg-gray-300 rounded py-6 px-12 w-400"
+        className="flex flex-col gap-4 bg-blue-50 rounded-xl py-6 px-12 w-400"
       >
         {isPending ? (
           "Loading"

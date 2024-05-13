@@ -17,14 +17,12 @@ export default function ChatNewForm({}: Props) {
   const { setChatSlug } = useContext(ChatContext);
 
   useLayoutEffect(() => {
-    {
-      if (setChatSlug) {
-        if (state && !state.error && state.chatSlug) {
-          setChatSlug(state.chatSlug);
-          window.localStorage.setItem("chatSlug", state.chatSlug);
-        } else if (state?.error) {
-          setError("Ошибка создания чата. Свяжитесь с администратором.");
-        }
+    if (setChatSlug) {
+      if (state && !state.error && state.chatSlug) {
+        setChatSlug(state.chatSlug);
+        window.localStorage.setItem("chatSlug", state.chatSlug);
+      } else if (state?.error) {
+        setError("Ошибка создания чата. Свяжитесь с администратором.");
       }
     }
   }, [state, setChatSlug]);

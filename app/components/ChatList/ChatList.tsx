@@ -1,29 +1,40 @@
 import { ChatContext } from "@/context/ChatContext";
-import React, { useContext } from "react";
+import { getChats } from "@/functions/getChats";
+import React, { useContext, useEffect, useState } from "react";
+import { IChatListElement } from "../../../types";
 
 type Props = {};
 
 export default function ChatList({}: Props) {
-  const { setChatSlug } = useContext(ChatContext);
+  const { chatSlug, setChatSlug } = useContext(ChatContext);
+  const [chats, setChats] = useState<IChatListElement[]>([]);
+
+  useEffect(() => {
+    getChats().then(({ data }) => {
+      console.log("ChatList:data", data);
+      if (data && data.length) {
+        console.log("data", data);
+        setChats(data.map(({ id, attributes }) => ({ id, ...attributes })));
+      }
+    });
+  }, []);
 
   return (
     <>
-      <button
-        className="m-2 bg-gray-600 rounded p-2 text-left text-yellow-400 font-bold"
-        onClick={() => {
-          if (setChatSlug) setChatSlug(1);
-        }}
-      >
-        Chat1
-      </button>
-      <button
-        className="m-2 bg-gray-600 rounded p-2 text-left"
-        onClick={() => {
-          if (setChatSlug) setChatSlug(2);
-        }}
-      >
-        Chat2
-      </button>
+      {chats &&
+        chats.map(({ slug, userName }) => (
+          <button
+            key={slug}
+            className={`m-2 bg-gray-600 rounded p-2 text-left ${
+              slug === chatSlug && "text-yellow-400"
+            } font-bold`}
+            onClick={() => {
+              if (setChatSlug) setChatSlug(slug);
+            }}
+          >
+            {userName}
+          </button>
+        ))}
     </>
   );
 }

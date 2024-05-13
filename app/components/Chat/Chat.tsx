@@ -13,10 +13,16 @@ type Props = {};
 export default function Chat({}: Props) {
   const { chatSlug, setChatSlug } = useContext(ChatContext);
   const { user } = useContext(UserContext);
+  console.log("user", user);
+  console.log("chatSlug", chatSlug);
 
   useLayoutEffect(() => {
-    const slug = window.localStorage.getItem("chatSlug") || "";
-    if (setChatSlug) setChatSlug(slug);
+    const r = /[^a-zA-Z0-9\-]/g;
+    const slug = (window.localStorage.getItem("chatSlug") || "").replaceAll(
+      r,
+      ""
+    );
+    if (setChatSlug && slug) setChatSlug(slug);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

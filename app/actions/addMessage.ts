@@ -17,6 +17,11 @@ export async function addMessage(
     reg,
     ""
   );
+
+  if (!chatSlug) {
+    return { error: "No such chat." };
+  }
+
   const userType =
     ((formData.get("userType") ?? "") as string).replaceAll(reg, "") ||
     USER_TYPE.user;
