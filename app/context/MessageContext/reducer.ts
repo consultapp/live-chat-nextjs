@@ -20,21 +20,11 @@ export function reducer(
     case "startLoading":
       return { ...state, loading: LOADING_STATUS.pending };
 
-    case "updateMessages":
-      if (payload.data.length) console.log("payload.data", payload.data);
+    case "addMessages":
       return {
-        messages: [
-          ...state.messages,
-          ...payload.data.map(
-            ({ id, attributes }: { id: number; attributes: any }) => ({
-              id,
-              ...attributes,
-            })
-          ),
-        ],
+        messages: [...state.messages, ...payload.data],
         loading: LOADING_STATUS.fulfilled,
       };
-      return { ...state, loading: LOADING_STATUS.fulfilled };
 
     default:
       break;

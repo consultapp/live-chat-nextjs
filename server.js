@@ -1,6 +1,10 @@
 import { createServer } from "node:http";
 import next from "next";
 import { Server } from "socket.io";
+import { cleanChatSlug } from "./app/functions/cleanChatSlug/cleanChatSlug";
+import { cleanMessage } from "./app/functions/cleanMessage";
+import { cleanUserType } from "./app/functions/cleanUserType";
+import { addMessage } from "./app/actions/addMessage";
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -18,24 +22,19 @@ app.prepare().then(() => {
   const io = new Server(httpServer);
 
   io.on("connection", (socket) => {
-    console.log("new Connection", socket);
-    socket.on("new-message", (data) => {
-      const { msg, slug, isAdmin = false } = data;
-      if (!socket.slug) socket.slug = slug;
-      socket.lastMsg = data;
+    socket.on("new-message", async (data) => {
+      const result = await addMessage(data);
+
+      if (result && !result.error) {
+        socket.emit("add-messages", result.messages ?? []);
+      } else {
+        socket.emit("error-add-messages", result.error ?? []);
+      }
 
       console.log("adminSockets", Object.keys(adminSockets));
-      console.log("userSockets", Object.keys(userSockets));
+      console.log("userSockets", Object.keys(clientSockets));
 
-      console.log("NEW MSG Data", data);
-      socket.emit("add-message", { msg, slug });
-      if (isAdmin) {
-        clientSockets.forEach(({ k, v }) => {
-          console.log("k,v", k, v);
-        });
-      } else {
-        clientSockets;
-      }
+      console.log("NEW MSG Data", { text, chatSlug, userType });
 
       // socket.broadcast.emit("add-message", "broadcast: " + msg);
     });

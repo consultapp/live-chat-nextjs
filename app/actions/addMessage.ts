@@ -1,48 +1,40 @@
 "use server";
 
-import USER_TYPE from "@/fixtures/USER_TYPE";
+import { cleanChatSlug } from "@/functions/cleanChatSlug";
+import { cleanMessage } from "@/functions/cleanMessage";
+import { cleanUserType } from "@/functions/cleanUserType";
+import { IMessage, INewMessage } from "@/types";
 
-export interface IAddMessageState {
-  data?: any;
+export async function addMessage(data: FormData): Promise<{
+  messages?: IMessage[];
   error?: string;
-}
+}> {
+  const chatSlug = cleanChatSlug((data.get("chatSlug") ?? "") as string);
+  const text = cleanMessage((data.get("text") ?? "") as string);
+  const userType = cleanUserType(data.get("userType" ?? "") as string);
 
-export async function addMessage(
-  previousState: IAddMessageState,
-  formData: FormData
-) {
-  const reg = /[^a-zA-ZА-Яа-я0-9.,!\- ]/g;
-  const text = ((formData.get("text") ?? "") as string).replaceAll(reg, "");
-  const chatSlug = ((formData.get("chatSlug") ?? "") as string).replaceAll(
-    reg,
-    ""
-  );
-
-  if (!chatSlug) {
-    return { error: "No such chat." };
-  }
-
-  const userType =
-    ((formData.get("userType") ?? "") as string).replaceAll(reg, "") ||
-    USER_TYPE.user;
+  if (!chatSlug) return { error: "No such chat." };
 
   const res = await fetch(process.env.STRAPI_SERVER + "/api/messages/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      data: {
-        text,
-        chatSlug,
-        userType,
-      },
-    }),
+    body: JSON.stringify({ data }),
   });
 
-  const data = await res.json();
+  const result: { id: number; attributes: any }[] = await res.json();
+  console.log("action data", result);
 
-  if (data) {
-    return data;
+  if (result && result.length) {
+    return {
+      messages: result.map(
+        ({ id, attributes }) =>
+          ({
+            id,
+            ...attributes,
+          } as IMessage)
+      ),
+    };
   } else return { error: "Auth Error" };
 }

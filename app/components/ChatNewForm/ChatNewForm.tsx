@@ -2,7 +2,7 @@ import { startNewChat } from "@/actions/startNewChat";
 import { ChatContext } from "@/context/ChatContext";
 import { useContext, useLayoutEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
-import { IChat, IChatStrapi } from "../../../types";
+import { IChat, IChatStrapi } from "../../types";
 
 type Props = {};
 

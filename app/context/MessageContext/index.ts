@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { IMessage } from "../../../types";
+import { IMessage } from "../../types";
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
 
 export interface IMessageContext {

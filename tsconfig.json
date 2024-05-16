@@ -23,11 +23,12 @@
   },
   "include": [
     "next-env.d.ts",
-    "types.d.ts",
+    "app/types.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/components/ChatSendMessageForm"
+    "app/components/ChatSendMessageForm",
+    "server.js"
   ],
   "exclude": ["node_modules"]
 }

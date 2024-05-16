@@ -52,3 +52,9 @@ interface IUser {
   userType: keyof typeof USER_TYPE;
   token?: string;
 }
+
+interface INewMessage {
+  text: string;
+  chatSlug: string;
+  userType: string;
+}

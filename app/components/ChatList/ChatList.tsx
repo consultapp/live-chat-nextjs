@@ -1,7 +1,7 @@
 import { ChatContext } from "@/context/ChatContext";
 import { getChats } from "@/functions/getChats";
 import React, { useContext, useEffect, useState } from "react";
-import { IChatListElement } from "../../../types";
+import { IChatListElement } from "../../types";
 
 type Props = {};
 

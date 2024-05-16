@@ -1,6 +1,6 @@
 import USER_TYPE from "@/fixtures/USER_TYPE";
 import { Dispatch, SetStateAction, createContext } from "react";
-import { IUser } from "../../../types";
+import { IUser } from "../../types";
 
 interface IInitialUserContext {
   user: IUser;

@@ -5,6 +5,7 @@ import ChatProvider from "./context/ChatContext/ChatProvider";
 import Script from "next/script";
 import MessagesProvider from "./context/MessageContext/MessageContext";
 import UserProvider from "./context/UserContext/UserContext";
+import SocketProvider from "./context/SocketProvider/SocketProvider";
 
 const opensans = Open_Sans({ subsets: ["latin"] });
 
@@ -26,9 +27,11 @@ export default function RootLayout({
       /> */}
       <UserProvider>
         <ChatProvider>
-          <MessagesProvider>
-            <body className={opensans.className}>{children}</body>
-          </MessagesProvider>
+          <SocketProvider>
+            <MessagesProvider>
+              <body className={opensans.className}>{children}</body>
+            </MessagesProvider>
+          </SocketProvider>
         </ChatProvider>
       </UserProvider>
     </html>

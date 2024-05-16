@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import USER_TYPE from "@/fixtures/USER_TYPE";
 import { UserContext } from ".";
-import { IUser } from "../../../types";
+import { IUser } from "../../types";
 
 type Props = { children: React.ReactElement };
 

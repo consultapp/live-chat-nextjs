@@ -1,7 +1,7 @@
 "use server";
 import { randomUUID } from "crypto";
 import { authAsManager } from "./authAsManager";
-import { IChat, IChatStrapi } from "../../types";
+import { IChat, IChatStrapi } from "../types";
 
 export async function startNewChat(previousState: IChat, formData: FormData) {
   const data = await authAsManager();
