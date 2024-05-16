@@ -3,7 +3,7 @@
 import { cleanChatSlug } from "@/functions/cleanChatSlug";
 import { cleanMessage } from "@/functions/cleanMessage";
 import { cleanUserType } from "@/functions/cleanUserType";
-import { IMessage, INewMessage } from "@/types";
+import { IMessage } from "@/types";
 
 export async function addMessage(data: FormData): Promise<{
   messages?: IMessage[];
@@ -20,21 +20,20 @@ export async function addMessage(data: FormData): Promise<{
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ data }),
+    body: JSON.stringify({ data: { chatSlug, text, userType } }),
   });
 
-  const result: { id: number; attributes: any }[] = await res.json();
-  console.log("action data", result);
+  const result: { data: { id: number; attributes: any } } = await res.json();
 
-  if (result && result.length) {
+  if (result && result?.data) {
+    const { id, attributes } = result?.data;
     return {
-      messages: result.map(
-        ({ id, attributes }) =>
-          ({
-            id,
-            ...attributes,
-          } as IMessage)
-      ),
+      messages: [
+        {
+          id,
+          ...attributes,
+        } as IMessage,
+      ],
     };
   } else return { error: "Auth Error" };
 }

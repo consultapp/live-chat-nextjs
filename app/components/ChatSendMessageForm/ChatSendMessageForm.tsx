@@ -1,17 +1,20 @@
 import { ChatContext } from "@/context/ChatContext";
 import React, { useContext, useEffect, useRef } from "react";
-import {
-  MessageContextDispatch,
-} from "@/context/MessageContext";
+import { MessageContextDispatch } from "@/context/MessageContext";
 import { loadMessages } from "@/functions/loadMessages";
 import { UserContext } from "@/context/UserContext";
 import { socket } from "@/socket";
+import { addMessage } from "@/actions/addMessage";
+import { useIsConnected } from "@/context/SocketProvider";
 
 type Props = {};
 
 export default function ChatSendMessageForm({}: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const isConnected = useIsConnected();
+  console.log("isConnected", isConnected);
 
   const { chatSlug } = useContext(ChatContext);
   const { user } = useContext(UserContext);
@@ -44,9 +47,19 @@ export default function ChatSendMessageForm({}: Props) {
             e.preventDefault();
             if (inputRef?.current?.value && formRef?.current) {
               if (inputRef?.current?.value.length > 0) {
-                formRef.current.requestSubmit();
-                socket.emit("new-message", new FormData(formRef.current));
-       if (inputRef?.current) inputRef.current.value = "";
+                addMessage(new FormData(formRef.current)).then((data) => {
+                  if (data && !data.error) {
+                    console.log("data.messages", data.messages);
+                    socket.emit("new-message", { ...data });
+                    dispatch({ type: "addMessages", payload: data.messages });
+
+                    if (inputRef?.current) {
+                      inputRef.current.value = "";
+                    }
+                  } else {
+                    console.log(data.error);
+                  }
+                });
 
                 return;
               } else {

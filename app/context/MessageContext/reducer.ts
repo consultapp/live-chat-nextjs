@@ -22,7 +22,7 @@ export function reducer(
 
     case "addMessages":
       return {
-        messages: [...state.messages, ...payload.data],
+        messages: [...state.messages, ...payload],
         loading: LOADING_STATUS.fulfilled,
       };
 

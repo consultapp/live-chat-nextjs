@@ -1,10 +1,6 @@
 import { createServer } from "node:http";
 import next from "next";
 import { Server } from "socket.io";
-import { cleanChatSlug } from "./app/functions/cleanChatSlug/cleanChatSlug";
-import { cleanMessage } from "./app/functions/cleanMessage";
-import { cleanUserType } from "./app/functions/cleanUserType";
-import { addMessage } from "./app/actions/addMessage";
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -22,19 +18,10 @@ app.prepare().then(() => {
   const io = new Server(httpServer);
 
   io.on("connection", (socket) => {
-    socket.on("new-message", async (data) => {
-      const result = await addMessage(data);
-
-      if (result && !result.error) {
-        socket.emit("add-messages", result.messages ?? []);
-      } else {
-        socket.emit("error-add-messages", result.error ?? []);
-      }
-
+    socket.on("new-message", (data) => {
+      console.log("new-message data", data);
       console.log("adminSockets", Object.keys(adminSockets));
       console.log("userSockets", Object.keys(clientSockets));
-
-      console.log("NEW MSG Data", { text, chatSlug, userType });
 
       // socket.broadcast.emit("add-message", "broadcast: " + msg);
     });
