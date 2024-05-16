@@ -1,3 +1,4 @@
+import { updateChatDate } from "@/actions/updateChatDate";
 import { ChatContext } from "@/context/ChatContext";
 import {
   MessageContext,
@@ -6,6 +7,18 @@ import {
 import { UserContext } from "@/context/UserContext";
 import { loadMessages } from "@/functions/loadMessages";
 import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
+
+import io from "Socket.IO-client";
+let socket;
+
+const socketInitializer = async () => {
+  await fetch("/api/socket");
+  socket = io();
+
+  socket.on("connect", () => {
+    console.log("connected");
+  });
+};
 
 type Props = {};
 
@@ -18,6 +31,10 @@ export default function ChatMessages({}: Props) {
   const { chatSlug } = useContext(ChatContext);
 
   useEffect(() => {
+    socketInitializer();
+  }, []);
+
+  useEffect(() => {
     if (!messages.length && chatSlug) {
       dispatch({ type: "startLoading" });
       loadMessages(chatSlug).then((data) => {
@@ -26,6 +43,16 @@ export default function ChatMessages({}: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (messages.length && chatSlug) {
+      dispatch({ type: "startLoading" });
+      updateChatDate(chatSlug).then((data) => {
+        dispatch({ type: "updateMessages", payload: data });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatSlug]);
 
   useLayoutEffect(() => {
     if (ref.current) {

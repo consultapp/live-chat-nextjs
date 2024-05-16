@@ -22,7 +22,7 @@ export default function Chat({}: Props) {
       r,
       ""
     );
-    if (setChatSlug && slug) setChatSlug(slug);
+    if (!chatSlug && setChatSlug && slug) setChatSlug(slug);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
