@@ -21,7 +21,7 @@ export default function ChatList({}: Props) {
   }, []);
 
   return (
-    <>
+    <div className="overflow-y-scroll flex flex-col rounded-xl">
       {chats &&
         chats.map(({ slug, userName }) => (
           <button
@@ -36,6 +36,6 @@ export default function ChatList({}: Props) {
             {userName}
           </button>
         ))}
-    </>
+    </div>
   );
 }

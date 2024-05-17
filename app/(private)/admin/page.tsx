@@ -6,7 +6,7 @@ export default function AdminPAge() {
   return (
     <>
       <section className="flex flex-row bg-white text-black min-h-screen">
-        <aside className="bg-gray-800 text-white flex flex-col gap-1 w-300 py-4">
+        <aside className="bg-gray-800 text-white flex flex-col gap-1 w-300 py-4 max-h-screen ">
           <h1 className="self-center font-bold text-xl">Chats</h1>
           <ChatList />
         </aside>
