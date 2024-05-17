@@ -1,8 +1,10 @@
 "use client";
 
 import { authAction } from "@/actions/authAction";
+import { useIsConnected } from "@/context/SocketProvider";
 import { UserContext } from "@/context/UserContext";
 import USER_TYPE from "@/fixtures/USER_TYPE";
+import { socket } from "@/socket";
 import React, { useContext, useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 
@@ -12,17 +14,21 @@ export default function LoginForm({}: Props) {
   const [state, formAction, isPending] = useFormState(authAction, {
     token: "",
   });
+  const isConnected = useIsConnected();
 
   const { setUser } = useContext(UserContext);
 
   useEffect(() => {
     if (state && state.token) {
       setUser({ userType: USER_TYPE.manager, token: state.token });
-      console.log("first", state.token);
     }
-
-    console.log("LoginForm: state", state);
   }, [state]);
+
+  useEffect(() => {
+    if (state && state.token && isConnected) {
+      socket.emit("set-manager");
+    }
+  }, [state, isConnected]);
 
   return (
     <section className="flex flex-row bg-gray-800 min-h-screen justify-center items-center">

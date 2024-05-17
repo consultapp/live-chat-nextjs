@@ -1,72 +1,63 @@
-import { updateChatDate } from "@/actions/updateChatDate";
-import { ChatContext } from "@/context/ChatContext";
 import {
-  MessageContext,
-  MessageContextDispatch,
+  useChatSlug,
+  useLoadingMessages,
+  useMessageDispatch,
+  useMessages,
 } from "@/context/MessageContext";
 import { UserContext } from "@/context/UserContext";
-import { loadMessages } from "@/functions/loadMessages";
 import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
-
-import io from "Socket.IO-client";
-let socket;
-
-const socketInitializer = async () => {
-  await fetch("/api/socket");
-  socket = io();
-
-  socket.on("connect", () => {
-    console.log("connected");
-  });
-};
+import { useIsConnected } from "../../context/SocketProvider/index";
+import { socket } from "@/socket";
+import { IMessage } from "@/types";
+import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
+import { getMessagesAction } from "@/actions/getMessagesAction";
 
 type Props = {};
 
 export default function ChatMessages({}: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const dispatch = useContext(MessageContextDispatch);
 
-  const { messages, loading } = useContext(MessageContext);
+  const dispatch = useMessageDispatch();
+  const isConnected = useIsConnected();
+  const messages = useMessages();
   const { user } = useContext(UserContext);
-  const { chatSlug } = useContext(ChatContext);
+  const chatSlug = useChatSlug();
+  const loading = useLoadingMessages();
 
   useEffect(() => {
-    socketInitializer();
-  }, []);
+    if (isConnected) {
+      socket.on(
+        "add-messages",
+        (data: { messages: IMessage[]; chatSlug: string }) => {
+          dispatch({ type: "addMessages", payload: data.messages });
+        }
+      );
+    }
+  }, [isConnected, dispatch]);
 
   useEffect(() => {
-    if (!messages.length && chatSlug) {
+    if (loading === LOADING_STATUS.idle && chatSlug) {
       dispatch({ type: "startLoading" });
-      loadMessages(chatSlug).then((data) => {
+      getMessagesAction(chatSlug).then((data) => {
         dispatch({ type: "saveMessages", payload: data });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [chatSlug]);
 
   useEffect(() => {
-    if (messages.length && chatSlug) {
-      dispatch({ type: "startLoading" });
-      updateChatDate(chatSlug).then((data) => {
-        dispatch({ type: "updateMessages", payload: data });
-      });
+    if (chatSlug && isConnected && user.userType === "user") {
+      socket.emit("set-user", chatSlug);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatSlug]);
+  }, [chatSlug, isConnected, user, user.userType]);
 
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTo({
         top: ref.current.scrollHeight,
       });
-      console.dir(ref.current);
     }
   }, [messages]);
-
-  // if (
-  //   loading === LOADING_STATUS.pending ||
-  //   (loading === LOADING_STATUS.idle && chatSlug)
-  // )
 
   return (
     <div

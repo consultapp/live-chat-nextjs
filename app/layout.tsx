@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
-import ChatProvider from "./context/ChatContext/ChatProvider";
-import Script from "next/script";
+// import Script from "next/script";
 import MessagesProvider from "./context/MessageContext/MessageContext";
 import UserProvider from "./context/UserContext/UserContext";
 import SocketProvider from "./context/SocketProvider/SocketProvider";
@@ -26,13 +25,11 @@ export default function RootLayout({
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`}
       /> */}
       <UserProvider>
-        <ChatProvider>
-          <SocketProvider>
-            <MessagesProvider>
-              <body className={opensans.className}>{children}</body>
-            </MessagesProvider>
-          </SocketProvider>
-        </ChatProvider>
+        <SocketProvider>
+          <MessagesProvider>
+            <body className={opensans.className}>{children}</body>
+          </MessagesProvider>
+        </SocketProvider>
       </UserProvider>
     </html>
   );

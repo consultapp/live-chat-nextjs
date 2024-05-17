@@ -1,8 +1,15 @@
 "use server";
 
-export async function getMessagesAction(getParams: string) {
+import { cleanChatSlug } from "@/functions/cleanChatSlug";
+import { IMessageStrapi, IStrapiResponse, TArray } from "@/types";
+
+export async function getMessagesAction(
+  chatSlug: string
+): Promise<IStrapiResponse<TArray<IMessageStrapi>>> {
   const res = await fetch(
-    `${process.env.STRAPI_SERVER}/api/messages/?${getParams}`,
+    `${
+      process.env.STRAPI_SERVER
+    }/api/messages/?filters[chatSlug][$eq]=${cleanChatSlug(chatSlug)}`,
     {
       method: "GET",
       headers: {
@@ -11,7 +18,5 @@ export async function getMessagesAction(getParams: string) {
     }
   );
 
-  const data = await res.json();
-
-  return data;
+  return await res.json();
 }

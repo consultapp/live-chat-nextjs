@@ -1,33 +1,21 @@
-import { ChatContext } from "@/context/ChatContext";
-import React, { useContext, useEffect, useRef } from "react";
-import { MessageContextDispatch } from "@/context/MessageContext";
-import { loadMessages } from "@/functions/loadMessages";
+import React, { useContext, useRef, useState } from "react";
+import { MessageContextDispatch, useChatSlug } from "@/context/MessageContext";
 import { UserContext } from "@/context/UserContext";
 import { socket } from "@/socket";
-import { addMessage } from "@/actions/addMessage";
 import { useIsConnected } from "@/context/SocketProvider";
+import { addMessageAction } from "@/actions/addMessageAction";
 
 type Props = {};
 
 export default function ChatSendMessageForm({}: Props) {
+  const [sending, setSending] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isConnected = useIsConnected();
-  console.log("isConnected", isConnected);
-
-  const { chatSlug } = useContext(ChatContext);
+  const chatSlug = useChatSlug();
   const { user } = useContext(UserContext);
   const dispatch = useContext(MessageContextDispatch);
-
-  useEffect(() => {
-    if (chatSlug) {
-      loadMessages(chatSlug).then((data) => {
-        dispatch({ type: "saveMessages", payload: data });
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatSlug, dispatch]);
 
   return (
     <>
@@ -35,6 +23,7 @@ export default function ChatSendMessageForm({}: Props) {
         <input
           type="text"
           name="text"
+          disabled={sending}
           className="flex-grow px-2  bg-white"
           ref={inputRef}
           placeholder="Введите текст"
@@ -43,23 +32,25 @@ export default function ChatSendMessageForm({}: Props) {
         <input type="hidden" name="userType" value={user.userType} />
         <button
           className="btn"
+          disabled={sending}
           onClick={(e) => {
             e.preventDefault();
             if (inputRef?.current?.value && formRef?.current) {
               if (inputRef?.current?.value.length > 0) {
-                addMessage(new FormData(formRef.current)).then((data) => {
+                addMessageAction(new FormData(formRef.current)).then((data) => {
                   if (data && !data.error) {
-                    console.log("data.messages", data.messages);
-                    socket.emit("new-message", { ...data });
+                    socket.emit("new-message", { ...data, chatSlug });
                     dispatch({ type: "addMessages", payload: data.messages });
-
                     if (inputRef?.current) {
                       inputRef.current.value = "";
                     }
                   } else {
                     console.log(data.error);
                   }
+                  setSending(false);
                 });
+
+                setSending(true);
 
                 return;
               } else {

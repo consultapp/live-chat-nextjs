@@ -2,7 +2,7 @@
 
 import LoginForm from "@/components/LoginForm/LoginForm";
 import { UserContext } from "@/context/UserContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 export default function PrivateLayout({
   children,

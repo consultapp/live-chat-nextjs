@@ -1,8 +1,7 @@
 import { startNewChat } from "@/actions/startNewChat";
-import { ChatContext } from "@/context/ChatContext";
-import { useContext, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
-import { IChat, IChatStrapi } from "../../types";
+import { useMessageDispatch } from "@/context/MessageContext";
 
 type Props = {};
 
@@ -14,18 +13,20 @@ export default function ChatNewForm({}: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { setChatSlug } = useContext(ChatContext);
+  const dispatch = useMessageDispatch();
 
   useLayoutEffect(() => {
-    if (setChatSlug) {
+    if (dispatch) {
       if (state && !state.error && state.chatSlug) {
-        setChatSlug(state.chatSlug);
+        console.log("state.chatSlug ", state.chatSlug);
+        dispatch({ type: "setChatSlug", payload: state.chatSlug });
+
         window.localStorage.setItem("chatSlug", state.chatSlug);
       } else if (state?.error) {
         setError("Ошибка создания чата. Свяжитесь с администратором.");
       }
     }
-  }, [state, setChatSlug]);
+  }, [state, dispatch]);
 
   return (
     <div className={`flex flex-col justify-center items-center h-full gap-3 `}>

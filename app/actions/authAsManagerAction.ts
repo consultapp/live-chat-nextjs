@@ -1,6 +1,6 @@
 "use server";
 
-export async function authAsManager() {
+export async function authAsManagerAction() {
   const res = await fetch(process.env.STRAPI_SERVER + "/api/auth/local/", {
     method: "POST",
     headers: {

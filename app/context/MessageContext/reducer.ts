@@ -4,7 +4,7 @@ import { IMessageContext } from ".";
 export function reducer(
   state: IMessageContext,
   { type, payload }: { type: string; payload?: any }
-) {
+): IMessageContext {
   switch (type) {
     case "saveMessages":
       return {
@@ -15,16 +15,37 @@ export function reducer(
           })
         ),
         loading: LOADING_STATUS.fulfilled,
+        chatSlug: payload.chatSlug,
       };
+
+    case "addMessages": {
+      if (
+        state?.messages?.at(-1)?.id !== payload?.at(-1)?.id &&
+        payload.chatSlug === state.chatSlug
+      ) {
+        return {
+          ...state,
+          messages: [...state.messages, ...payload.messages],
+          loading: LOADING_STATUS.fulfilled,
+        };
+      }
+      return {
+        ...state,
+        loading: LOADING_STATUS.fulfilled,
+      };
+    }
 
     case "startLoading":
       return { ...state, loading: LOADING_STATUS.pending };
 
-    case "addMessages":
+    case "setChatSlug": {
       return {
-        messages: [...state.messages, ...payload],
-        loading: LOADING_STATUS.fulfilled,
+        ...state,
+        chatSlug: payload,
+        messages: [],
+        loading: LOADING_STATUS.idle,
       };
+    }
 
     default:
       break;

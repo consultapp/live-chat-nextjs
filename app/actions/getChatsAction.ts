@@ -1,11 +1,13 @@
 "use server";
 
-import { authAsManager } from "./authAsManager";
+import { IChatStrapi, IStrapiResponse, TArray } from "@/types";
+import { authAsManagerAction } from "./authAsManagerAction";
 
-export async function getChatsAction(token: string = "") {
-  const data1 = await authAsManager();
+export async function getChatsAction(
+  token: string = ""
+): Promise<IStrapiResponse<TArray<IChatStrapi>>> {
+  const data1 = await authAsManagerAction();
 
-  // if (token) {
   const res = await fetch(
     process.env.STRAPI_SERVER + "/api/chats/?sort=updatedAt:desc",
     {
@@ -16,10 +18,6 @@ export async function getChatsAction(token: string = "") {
       },
     }
   );
-  const data = await res.json();
 
-  return data;
-  // } else {
-  //   return { error: "bad user" };
-  // }
+  return await res.json();
 }

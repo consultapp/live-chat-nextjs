@@ -1,60 +1,68 @@
 import USER_TYPE from "@/fixtures/USER_TYPE";
-
-export interface IChatStrapi {
-  data?: {
-    id: number;
-    attributes: {
-      userName: string;
-      createdAt: string;
-      updatedAt: string;
-      slug: string;
-    };
-  };
-
-  meta?: {};
-}
-
-export interface IChatsStrapi {
-  data: {
-    id: number;
-    attributes: {
-      userName: string;
-      createdAt: string;
-      updatedAt: string;
-      slug: string;
-    };
-  }[];
-}
+import { IMessage } from "@/types";
 
 export interface IChat {
   chatSlug?: string;
   error?: string;
 }
 
-export interface IChatListElement {
+export type IChatListElement = {
   id: number;
-  createdAt: string;
-  updatedAt: string;
-  userName: string;
-  slug: string;
-}
+} & IChatStrapi;
 
-interface IMessage {
+export type IMessage = {
   id: number;
-  text: string;
-  userType: keyof typeof USER_TYPE;
-  createdAt: Date;
-  updatedAt: Date;
-  chatSlug?: string;
-}
+} & IMessageStrapi;
 
-interface IUser {
+export interface IUser {
   userType: keyof typeof USER_TYPE;
   token?: string;
 }
 
-interface INewMessage {
+export interface INewMessage {
   text: string;
   chatSlug: string;
   userType: string;
+}
+
+export interface IChatStrapi {
+  userName: string;
+  createdAt: string;
+  updatedAt: string;
+  slug: string;
+}
+
+export interface IMessageStrapi {
+  text: string;
+  userType: keyof typeof USER_TYPE;
+  createdAt: string;
+  updatedAt: string;
+  chatSlug: string;
+}
+
+type TArray<T> = { id: number; attributes: T }[];
+type TOne<T> = { id: number; attributes: T };
+
+export interface IStrapiResponse<T> {
+  data: T | null;
+  error?: {
+    status: 404;
+    name: "NotFoundError";
+    message: "Not Found";
+    details: {};
+  };
+  meta?: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+export interface IAddMessages {
+  chatSlug?: string;
+  messages?: IMessage[];
+  error?: string;
 }

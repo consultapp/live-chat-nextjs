@@ -11,6 +11,7 @@ const handler = app.getRequestHandler();
 
 const adminSockets = [];
 const clientSockets = [];
+const clientSocketsIds = [];
 
 app.prepare().then(() => {
   const httpServer = createServer(handler);
@@ -19,11 +20,27 @@ app.prepare().then(() => {
 
   io.on("connection", (socket) => {
     socket.on("new-message", (data) => {
-      console.log("new-message data", data);
-      console.log("adminSockets", Object.keys(adminSockets));
-      console.log("userSockets", Object.keys(clientSockets));
+      console.log("adminSockets", adminSockets.length);
+      console.log("clientSockets", clientSockets);
+      console.log("clientSocketsIds", clientSocketsIds);
+      if (clientSocketsIds.includes(socket.id)) {
+        adminSockets.map((s) => s.emit("add-messages", data));
+      } else {
+        clientSockets[data.chatSlug].emit("add-messages", data);
+      }
+    });
 
-      // socket.broadcast.emit("add-message", "broadcast: " + msg);
+    socket.on("set-manager", () => {
+      if (!adminSockets.includes(socket)) {
+        adminSockets.push(socket);
+      }
+    });
+
+    socket.on("set-user", (chatSlug) => {
+      if (!clientSocketsIds.includes(socket.id)) {
+        clientSockets[chatSlug] = socket;
+        clientSocketsIds.push(socket.id);
+      }
     });
   });
 

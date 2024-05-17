@@ -1,20 +1,26 @@
 "use client";
-import React, { useContext, useEffect, useLayoutEffect } from "react";
+import React, { useContext, useLayoutEffect } from "react";
 import ChatNewForm from "../ChatNewForm/ChatNewForm";
-import { ChatContext } from "@/context/ChatContext";
 import USER_TYPE from "@/fixtures/USER_TYPE";
 
 import { UserContext } from "@/context/UserContext";
 import ChatSendMessageForm from "../ChatSendMessageForm/ChatSendMessageForm";
 import ChatMessages from "../ChatMessages/ChatMessages";
+import {
+  MessageContext,
+  useChatSlug,
+  useMessageDispatch,
+} from "@/context/MessageContext";
 
 type Props = {};
 
 export default function Chat({}: Props) {
-  const { chatSlug, setChatSlug } = useContext(ChatContext);
+  const chatSlug = useChatSlug();
+  const dispatch = useMessageDispatch();
+  const mc = useContext(MessageContext);
   const { user } = useContext(UserContext);
-  console.log("user", user);
-  console.log("chatSlug", chatSlug);
+
+  console.log("mc", mc);
 
   useLayoutEffect(() => {
     const r = /[^a-zA-Z0-9\-]/g;
@@ -22,7 +28,9 @@ export default function Chat({}: Props) {
       r,
       ""
     );
-    if (!chatSlug && setChatSlug && slug) setChatSlug(slug);
+    if (!chatSlug && dispatch && slug) {
+      dispatch({ type: "setChatSlug", payload: slug });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
