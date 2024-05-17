@@ -23,7 +23,7 @@ export default function LoginForm({}: Props) {
     if (state && state.token) {
       setUser({ userType: USER_TYPE.manager, token: state.token });
     }
-  }, [state]);
+  }, [state, setUser]);
 
   useEffect(() => {
     if (state && state.token && isConnected) {
