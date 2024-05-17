@@ -1,5 +1,6 @@
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
 import { IMessageContext } from ".";
+import { IAddMessages } from "@/types";
 
 export function reducer(
   state: IMessageContext,
@@ -19,13 +20,14 @@ export function reducer(
       };
 
     case "addMessages": {
+      const { messages = [], chatSlug } = payload as IAddMessages;
       if (
-        state?.messages?.at(-1)?.id !== payload?.at(-1)?.id &&
-        payload.chatSlug === state.chatSlug
+        state.messages.at(-1)?.id !== messages.at(-1)?.id &&
+        state.chatSlug === chatSlug
       ) {
         return {
           ...state,
-          messages: [...state.messages, ...payload.messages],
+          messages: [...state.messages, ...messages],
           loading: LOADING_STATUS.fulfilled,
         };
       }

@@ -20,9 +20,10 @@ app.prepare().then(() => {
 
   io.on("connection", (socket) => {
     socket.on("new-message", (data) => {
-      console.log("adminSockets", adminSockets.length);
-      console.log("clientSockets", clientSockets);
-      console.log("clientSocketsIds", clientSocketsIds);
+      // console.log("adminSockets", adminSockets.length);
+      // console.log("clientSockets", clientSockets);
+      // console.log("clientSocketsIds", clientSocketsIds);
+
       if (clientSocketsIds.includes(socket.id)) {
         adminSockets.map((s) => s.emit("add-messages", data));
       } else {

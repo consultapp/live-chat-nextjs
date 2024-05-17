@@ -15,8 +15,9 @@ export default function LoginForm({}: Props) {
     token: "",
   });
   const isConnected = useIsConnected();
-
   const { setUser } = useContext(UserContext);
+
+  console.log("==== Component LoginForm ====");
 
   useEffect(() => {
     if (state && state.token) {

@@ -10,6 +10,8 @@ export default function ChatList({}: Props) {
   const dispatch = useMessageDispatch();
   const [chats, setChats] = useState<IChatListElement[]>([]);
 
+  console.log("==== Component ChatList ====");
+
   useEffect(() => {
     getChatsAction().then(({ data }) => {
       if (data && data.length) {

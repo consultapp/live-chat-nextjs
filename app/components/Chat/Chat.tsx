@@ -6,21 +6,16 @@ import USER_TYPE from "@/fixtures/USER_TYPE";
 import { UserContext } from "@/context/UserContext";
 import ChatSendMessageForm from "../ChatSendMessageForm/ChatSendMessageForm";
 import ChatMessages from "../ChatMessages/ChatMessages";
-import {
-  MessageContext,
-  useChatSlug,
-  useMessageDispatch,
-} from "@/context/MessageContext";
+import { useChatSlug, useMessageDispatch } from "@/context/MessageContext";
 
 type Props = {};
 
 export default function Chat({}: Props) {
   const chatSlug = useChatSlug();
   const dispatch = useMessageDispatch();
-  const mc = useContext(MessageContext);
   const { user } = useContext(UserContext);
 
-  console.log("mc", mc);
+  console.log("==== Component Chat ====");
 
   useLayoutEffect(() => {
     const r = /[^a-zA-Z0-9\-]/g;

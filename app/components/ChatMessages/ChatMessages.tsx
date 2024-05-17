@@ -8,7 +8,6 @@ import { UserContext } from "@/context/UserContext";
 import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
 import { useIsConnected } from "../../context/SocketProvider/index";
 import { socket } from "@/socket";
-import { IMessage } from "@/types";
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
 import { getMessagesAction } from "@/actions/getMessagesAction";
 
@@ -24,22 +23,28 @@ export default function ChatMessages({}: Props) {
   const chatSlug = useChatSlug();
   const loading = useLoadingMessages();
 
+  console.log("==== Component ChatMessages ====");
+
   useEffect(() => {
     if (isConnected) {
-      socket.on(
-        "add-messages",
-        (data: { messages: IMessage[]; chatSlug: string }) => {
-          dispatch({ type: "addMessages", payload: data.messages });
-        }
-      );
+      socket.on("add-messages", (data) => {
+        console.log("DATA", data);
+        dispatch({ type: "addMessages", payload: { ...data } });
+      });
     }
   }, [isConnected, dispatch]);
 
   useEffect(() => {
     if (loading === LOADING_STATUS.idle && chatSlug) {
       dispatch({ type: "startLoading" });
-      getMessagesAction(chatSlug).then((data) => {
-        dispatch({ type: "saveMessages", payload: data });
+      getMessagesAction(chatSlug).then(({ data, error }) => {
+        if (error) {
+          console.log("Error:", error);
+        } else
+          dispatch({
+            type: "saveMessages",
+            payload: { data, chatSlug },
+          });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

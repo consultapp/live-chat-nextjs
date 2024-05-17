@@ -14,10 +14,10 @@ export default function MessagesProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialMessageContext);
 
   return (
-    <MessageContext.Provider value={state as IMessageContext}>
-      <MessageContextDispatch.Provider value={dispatch}>
+    <MessageContextDispatch.Provider value={dispatch}>
+      <MessageContext.Provider value={state as IMessageContext}>
         {children}
-      </MessageContextDispatch.Provider>
-    </MessageContext.Provider>
+      </MessageContext.Provider>
+    </MessageContextDispatch.Provider>
   );
 }
