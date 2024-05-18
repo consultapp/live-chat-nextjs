@@ -8,6 +8,7 @@ type Props = { children: React.ReactElement };
 export default function SocketProvider({ children }: Props) {
   const [isConnected, setIsConnected] = useState(false);
   //   const [transport, setTransport] = useState("N/A");
+  console.log("==== Component SocketProvider ====");
 
   useEffect(() => {
     if (socket.connected) {

@@ -7,7 +7,11 @@
     "dev": "node server.js",
     "build": "next build",
     "lint": "next lint",
-    "start": "NODE_ENV=production node server.ts"
+    "start": "NODE_ENV=production node server.ts",
+    "dbuild": "docker build -t test7778/live-chat-nextjs .",
+    "dpush": "docker push test7778/live-chat-nextjs",
+    "dpull": "docker pull test7778/live-chat-nextjs",
+    "drun": "docker run -d --rm --name live-chat-nextjs -p 3031:3000 test7778/live-chat-nextjs"
   },
   "dependencies": {
     "next": "14.2.3",
