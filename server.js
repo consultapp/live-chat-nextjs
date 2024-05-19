@@ -13,27 +13,38 @@ const adminSockets = [];
 const clientSockets = [];
 const clientSocketsIds = [];
 
+// let timer = null;
+
 app.prepare().then(() => {
   const httpServer = createServer(handler);
 
   const io = new Server(httpServer);
 
   io.on("connection", (socket) => {
-    socket.on("new-message", (data) => {
-      // console.log("adminSockets", adminSockets.length);
-      // console.log("clientSockets", clientSockets);
-      // console.log("clientSocketsIds", clientSocketsIds);
+    // timer = setInterval(() => {
+    //   adminSockets.forEach((item) => {
+    //     item.emit("ping");
+    //   });
+    //   clientSockets.forEach((item) => {
+    //     item.emit("ping");
+    //   });
+    // }, 5000);
 
+    socket.on("new-message", (data) => {
       if (clientSocketsIds.includes(socket.id)) {
-        adminSockets.map((s) => s.emit("add-messages", data));
+        io.to("admins").emit("add-messages", data);
       } else {
         clientSockets[data.chatSlug].emit("add-messages", data);
+        adminSockets.forEach(
+          (s) => s !== socket && s.emit("add-messages", data)
+        );
       }
     });
 
     socket.on("set-manager", () => {
       if (!adminSockets.includes(socket)) {
         adminSockets.push(socket);
+        socket.join("admins");
       }
     });
 

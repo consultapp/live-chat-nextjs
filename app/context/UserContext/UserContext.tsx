@@ -8,7 +8,6 @@ type Props = { children: React.ReactElement };
 
 export default function UserProvider({ children }: Props) {
   const [user, setUser] = useState<IUser>({ userType: USER_TYPE.user });
-  console.log("==== Component UserProvider ====");
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

@@ -8,7 +8,6 @@ type Props = { children: React.ReactElement };
 export default function SocketProvider({ children }: Props) {
   const [isConnected, setIsConnected] = useState(false);
   //   const [transport, setTransport] = useState("N/A");
-  console.log("==== Component SocketProvider ====");
 
   useEffect(() => {
     if (socket.connected) {
@@ -17,6 +16,10 @@ export default function SocketProvider({ children }: Props) {
 
     function onConnect() {
       setIsConnected(true);
+      socket.on("ping", () => {
+        console.log("got PING");
+        socket.emit("ping-response");
+      });
       //   setTransport(socket.io.engine.transport.name);
 
       //   socket.io.engine.on("upgrade", (transport) => {

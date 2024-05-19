@@ -10,15 +10,17 @@ export default function ChatList({}: Props) {
   const dispatch = useMessageDispatch();
   const [chats, setChats] = useState<IChatListElement[]>([]);
 
-  console.log("==== Component ChatList ====");
-
   useEffect(() => {
     getChatsAction().then(({ data }) => {
       if (data && data.length) {
         setChats(data.map(({ id, attributes }) => ({ id, ...attributes })));
+        dispatch({
+          type: "setChatSlug",
+          payload: data.at(0)?.attributes.slug,
+        });
       }
     });
-  }, []);
+  }, [setChats, dispatch]);
 
   return (
     <div className="overflow-y-scroll flex flex-col rounded-xl">

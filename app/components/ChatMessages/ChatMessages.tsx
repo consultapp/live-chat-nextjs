@@ -23,8 +23,6 @@ export default function ChatMessages({}: Props) {
   const chatSlug = useChatSlug();
   const loading = useLoadingMessages();
 
-  console.log("==== Component ChatMessages ====");
-
   useEffect(() => {
     if (isConnected) {
       socket.on("add-messages", (data) => {

@@ -15,8 +15,6 @@ export default function ChatNewForm({}: Props) {
 
   const dispatch = useMessageDispatch();
 
-  console.log("==== Component ChatNewForm ====");
-
   useLayoutEffect(() => {
     if (dispatch) {
       if (state && !state.error && state.chatSlug) {

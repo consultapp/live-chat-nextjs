@@ -18,8 +18,6 @@ export default function ChatSendMessageForm({}: Props) {
   const { user } = useContext(UserContext);
   const dispatch = useContext(MessageContextDispatch);
 
-  console.log("==== Component ChatSendMessageForm ====");
-
   return (
     <form className="flex flex-row  p-2  gap-2 mx-4 " ref={formRef}>
       <input

@@ -15,8 +15,6 @@ export default function Chat({}: Props) {
   const dispatch = useMessageDispatch();
   const { user } = useContext(UserContext);
 
-  console.log("==== Component Chat ====");
-
   useLayoutEffect(() => {
     const r = /[^a-zA-Z0-9\-]/g;
     const slug = (window.localStorage.getItem("chatSlug") || "").replaceAll(

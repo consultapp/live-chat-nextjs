@@ -12,7 +12,6 @@ type Props = { children: React.ReactElement };
 
 export default function MessagesProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialMessageContext);
-  console.log("==== Component MessagesProvider ====");
 
   return (
     <MessageContextDispatch.Provider value={dispatch}>
