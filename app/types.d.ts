@@ -44,7 +44,7 @@ type TArray<T> = { id: number; attributes: T }[];
 type TOne<T> = { id: number; attributes: T };
 
 export interface IStrapiResponse<T> {
-  data: Maybe<T>;
+  data: T | null | undefined;
   error?: {
     status?: number;
     name?: string;
