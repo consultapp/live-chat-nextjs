@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "PORT=3031 node server.js",
     "build": "next build",
     "lint": "next lint",
-    "start": "NODE_ENV=production node server.js",
+    "start": "PORT=3031  NODE_ENV=production node server.js",
     "dbuild": "docker build -t test7778/live-chat-nextjs .",
     "dpush": "docker push test7778/live-chat-nextjs",
     "dpull": "docker pull test7778/live-chat-nextjs",
