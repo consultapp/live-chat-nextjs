@@ -18,5 +18,18 @@ export async function getMessagesAction(
     }
   );
 
+  if (res.status !== 200) {
+    console.log("getMessagesAction:", res);
+    return {
+      error: {
+        status: res.status,
+        name: "Error",
+        message: res.statusText,
+        details: {},
+      },
+      data: null,
+    };
+  }
+
   return await res.json();
 }

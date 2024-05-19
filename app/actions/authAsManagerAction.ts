@@ -12,7 +12,10 @@ export async function authAsManagerAction() {
     }),
   });
 
-  console.log("res", res);
+  if (res.status !== 200) {
+    console.log("authAsManagerAction res:", res);
+    return { error: "Auth Err:" + res.statusText };
+  }
 
   const data = await res.json();
 

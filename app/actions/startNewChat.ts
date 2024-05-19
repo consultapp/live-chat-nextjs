@@ -27,7 +27,10 @@ export async function startNewChat(previousState: IChat, formData: FormData) {
       }),
     });
 
-    console.log("res1", res1);
+    if (res1.status !== 200) {
+      console.log("startNewChat:", res1);
+      return { error: "Error of starting new chat." };
+    }
 
     const data1: { data: { attributes: IChatStrapi } } = await res1.json();
 

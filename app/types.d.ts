@@ -44,12 +44,12 @@ type TArray<T> = { id: number; attributes: T }[];
 type TOne<T> = { id: number; attributes: T };
 
 export interface IStrapiResponse<T> {
-  data: T | null;
+  data: Maybe<T>;
   error?: {
-    status: 404;
-    name: "NotFoundError";
-    message: "Not Found";
-    details: {};
+    status?: number;
+    name?: string;
+    message?: string;
+    details?: {};
   };
   meta?: {
     pagination: {

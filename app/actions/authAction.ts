@@ -24,6 +24,11 @@ export async function authAction(
     }),
   });
 
+  if (res.status !== 200) {
+    console.log("authAction:", res);
+    return { error: "Auth Err:" + res.statusText };
+  }
+
   const data = await res.json();
   console.log("data", data);
   if (data && data.jwt) {

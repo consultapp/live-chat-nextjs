@@ -20,6 +20,11 @@ export async function addMessageAction(data: FormData): Promise<IAddMessages> {
     body: JSON.stringify({ data: { chatSlug, text, userType } }),
   });
 
+  if (res.status !== 200) {
+    console.log("addMessageAction:", res);
+    return { error: "Add Message:" + res.statusText };
+  }
+
   const result: IStrapiResponse<TOne<IMessageStrapi>> = await res.json();
 
   if (result && result.data) {
@@ -33,5 +38,5 @@ export async function addMessageAction(data: FormData): Promise<IAddMessages> {
         },
       ],
     };
-  } else return { error: "Auth Error" };
+  } else return { error: "Add Message Error" };
 }

@@ -19,5 +19,18 @@ export async function getChatsAction(
     }
   );
 
+  if (res.status !== 200) {
+    console.log("getChatsAction:", res);
+    return {
+      error: {
+        status: res.status,
+        name: "Error",
+        message: res.statusText,
+        details: {},
+      },
+      data: null,
+    };
+  }
+
   return await res.json();
 }
