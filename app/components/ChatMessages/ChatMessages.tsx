@@ -26,7 +26,6 @@ export default function ChatMessages({}: Props) {
   useEffect(() => {
     if (isConnected) {
       socket.on("add-messages", (data) => {
-        console.log("DATA", data);
         dispatch({ type: "addMessages", payload: { ...data } });
       });
     }
