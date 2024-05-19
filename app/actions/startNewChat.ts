@@ -27,6 +27,8 @@ export async function startNewChat(previousState: IChat, formData: FormData) {
       }),
     });
 
+    console.log("res1", res1);
+
     const data1: { data: { attributes: IChatStrapi } } = await res1.json();
 
     if (data1 && data1.data) {

@@ -12,6 +12,8 @@ export async function authAsManagerAction() {
     }),
   });
 
+  console.log("res", res);
+
   const data = await res.json();
 
   if (data && data.jwt) {
