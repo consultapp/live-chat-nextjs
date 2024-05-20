@@ -29,14 +29,14 @@ export default function Chat({}: Props) {
 
   return (
     <main
-      className={`flex bg-gray-800 h-screen p-3 ${
+      className={`flex bg-gray-800 h-screen p-0 md:p-3 ${
         user.userType === USER_TYPE.user
-          ? "w-500  border-gray-500"
+          ? "w-full md:w-500  border-gray-500"
           : "max-w-half1 w-full "
       }`}
     >
       <div
-        className={`flex flex-col p-2 flex-grow gap-2 px-2 bg-blue-50 rounded-xl w-full`}
+        className={`flex flex-col md:p-2 md:px-2 py-2 flex-grow gap-2  bg-blue-50 md:rounded-xl w-full`}
       >
         {chatSlug ? (
           <>

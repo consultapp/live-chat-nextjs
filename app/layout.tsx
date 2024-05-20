@@ -20,17 +20,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <Script
-        id="recaptcha"
-        src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_SITE_KEY}`}
-      /> */}
-      <UserProvider>
-        <SocketProvider>
+      <SocketProvider>
+        <UserProvider>
           <MessagesProvider>
             <body className={opensans.className}>{children}</body>
           </MessagesProvider>
-        </SocketProvider>
-      </UserProvider>
+        </UserProvider>
+      </SocketProvider>
     </html>
   );
 }
