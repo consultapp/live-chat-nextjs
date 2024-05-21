@@ -55,7 +55,7 @@ export default function ChatNewForm({}: Props) {
                 formRef.current.requestSubmit();
                 return;
               } else {
-                setError("Имя должно быть от 3 до 30 символов");
+                setError("Имя должно быть от 4 до 30 символов");
                 return;
               }
             }
