@@ -4,8 +4,10 @@ import type { RootState } from "@/store";
 export const selectData = (state: RootState) => state.dataSlice;
 
 export const selectDataMessages = (state: RootState) =>
-  selectData(state).messages;
-export const selectDataSlug = (state: RootState) => selectData(state).chatSlug;
+  selectData(state).messages[selectDataSlug(state)];
+
+export const selectDataSlug = (state: RootState) =>
+  selectData(state).slug || "";
 
 export const selectDataLoading = (state: RootState) =>
   selectData(state).loading;

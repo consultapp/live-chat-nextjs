@@ -6,26 +6,13 @@ import USER_TYPE from "@/fixtures/USER_TYPE";
 import { UserContext } from "@/context/UserContext";
 import ChatSendMessageForm from "../ChatSendMessageForm/ChatSendMessageForm";
 import ChatMessages from "../ChatMessages/ChatMessages";
-import { useChatSlug, useMessageDispatch } from "@/context/MessageContext";
+import { useSlug } from "@/store/dataSlice/hooks";
 
 type Props = {};
 
 export default function Chat({}: Props) {
-  const chatSlug = useChatSlug();
-  const dispatch = useMessageDispatch();
+  const slug = useSlug();
   const { user } = useContext(UserContext);
-
-  useLayoutEffect(() => {
-    const r = /[^a-zA-Z0-9\-]/g;
-    const slug = (window.localStorage.getItem("chatSlug") || "").replaceAll(
-      r,
-      ""
-    );
-    if (!chatSlug && dispatch && slug) {
-      dispatch({ type: "setChatSlug", payload: slug });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <main
@@ -38,10 +25,10 @@ export default function Chat({}: Props) {
       <div
         className={`flex flex-col md:p-2 md:px-2 py-2 flex-grow gap-2  bg-blue-50 md:rounded-xl w-full`}
       >
-        {chatSlug ? (
+        {slug ? (
           <>
-            <ChatMessages />
-            <ChatSendMessageForm />
+            {/* <ChatMessages /> */}
+            {/* <ChatSendMessageForm /> */}
           </>
         ) : (
           user.userType === USER_TYPE.user && <ChatNewForm />

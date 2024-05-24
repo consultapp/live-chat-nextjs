@@ -1,22 +1,14 @@
 "use client";
 import Link from "next/link";
-import { useChatSlug, useMessageDispatch } from "./context/MessageContext";
-import { useLayoutEffect } from "react";
+import { setSlug } from "./store/dataSlice";
+import { useAppDispatch } from "./store/hooks";
 
 export default function HomePage() {
-  const dispatch = useMessageDispatch();
-  const chatSlug = useChatSlug();
-  let windowSlug = "";
+  const dispatch = useAppDispatch();
 
   const clearData = () => {
-    window.localStorage.setItem("chatSlug", "");
-    dispatch({ type: "setChatSlug", payload: "" });
+    dispatch(setSlug(""));
   };
-
-  useLayoutEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    windowSlug = (window.localStorage.getItem("chatSlug") as string) || "";
-  }, []);
 
   return (
     <div className="mt-4 bg-white p-4 rounded m-auto sm:w-full md:w-400">
@@ -31,11 +23,7 @@ export default function HomePage() {
         </ul>
       </div>
       <div className="mt-2">
-        <button
-          onClick={clearData}
-          className="btn"
-          disabled={!(chatSlug || windowSlug)}
-        >
+        <button onClick={clearData} className="btn">
           Clear Data
         </button>
       </div>

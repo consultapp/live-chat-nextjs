@@ -1,32 +1,27 @@
 import { startNewChat } from "@/actions/startNewChat";
+import { setSlug } from "@/store/dataSlice";
+import { useAppDispatch } from "@/store/hooks";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
-import { useMessageDispatch } from "@/context/MessageContext";
 
 type Props = {};
 
 export default function ChatNewForm({}: Props) {
+  const dispatch = useAppDispatch();
   const [state, formAction, isPending] = useFormState(startNewChat, {
-    chatSlug: "",
+    slug: "",
   });
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const dispatch = useMessageDispatch();
-
   useLayoutEffect(() => {
-    if (dispatch) {
-      if (state && !state.error && state.chatSlug) {
-        console.log("state.chatSlug ", state.chatSlug);
-        dispatch({ type: "setChatSlug", payload: state.chatSlug });
-
-        window.localStorage.setItem("chatSlug", state.chatSlug);
-      } else if (state?.error) {
-        setError("Ошибка создания чата. Свяжитесь с администратором.");
-      }
+    if (state && !state.error && state.slug) {
+      dispatch(setSlug(state.slug));
+    } else if (state?.error) {
+      setError("Ошибка создания чата. Свяжитесь с администратором.");
     }
-  }, [state, dispatch]);
+  }, [state]);
 
   return (
     <div className={`flex flex-col justify-center items-center h-full gap-3 `}>
@@ -42,11 +37,13 @@ export default function ChatNewForm({}: Props) {
           name="name"
           className="self-center p-2 border rounded w-full"
           ref={inputRef}
+          disabled={isPending}
         />
         <label className=" text-red-800">{error}</label>
         <button
           className="btn bg-gray-800 text-white rounded p-2"
           type="submit"
+          disabled={isPending}
           onClick={(e) => {
             e.preventDefault();
             if (inputRef?.current?.value && formRef?.current) {

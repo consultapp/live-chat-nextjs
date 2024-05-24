@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
 // import Script from "next/script";
-import MessagesProvider from "./context/MessageContext/MessageContext";
 import UserProvider from "./context/UserContext/UserContext";
 import SocketProvider from "./context/SocketProvider/SocketProvider";
+import { StoreProvider } from "./store/provider";
 
 const opensans = Open_Sans({ subsets: ["latin"] });
 
@@ -20,13 +20,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <SocketProvider>
-        <UserProvider>
-          <MessagesProvider>
+      <StoreProvider>
+        <SocketProvider>
+          <UserProvider>
             <body className={opensans.className}>{children}</body>
-          </MessagesProvider>
-        </UserProvider>
-      </SocketProvider>
+          </UserProvider>
+        </SocketProvider>
+      </StoreProvider>
     </html>
   );
 }

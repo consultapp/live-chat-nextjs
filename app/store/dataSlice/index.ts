@@ -10,14 +10,14 @@ import {
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
 
 interface IDataState {
-  chatSlug: string;
-  messages: IMessage[];
+  slug: string;
+  messages: Record<string, IMessage[]>;
   loading: keyof typeof LOADING_STATUS;
 }
 
 const initialState: IDataState = {
-  chatSlug: "",
-  messages: [],
+  slug: "",
+  messages: {},
   loading: LOADING_STATUS.idle,
 };
 
@@ -30,10 +30,10 @@ export const dataSlice = createSlice({
       {
         payload,
       }: PayloadAction<
-        IStrapiResponse<TArray<IMessageStrapi>> & { chatSlug: string }
+        IStrapiResponse<TArray<IMessageStrapi>> & { slug: string }
       >
     ) => {
-      state.messages =
+      state.messages[payload.slug] =
         payload.data?.map(
           ({ id, attributes }: { id: number; attributes: any }) => ({
             id,
@@ -41,16 +41,16 @@ export const dataSlice = createSlice({
           })
         ) || [];
       state.loading = LOADING_STATUS.fulfilled;
-      state.chatSlug = payload.chatSlug;
+      state.slug = payload.slug;
     },
 
     addMessages: (state, { payload }: PayloadAction<IAddMessages>) => {
-      const { messages = [], chatSlug } = payload;
+      const { messages = [], slug } = payload;
       if (
-        state.messages.at(-1)?.id !== messages.at(-1)?.id &&
-        state.chatSlug === chatSlug
+        state.messages[slug].at(-1)?.id !== messages.at(-1)?.id &&
+        state.slug === slug
       ) {
-        state.messages.push(...messages);
+        state.messages[slug].push(...messages);
         state.loading = LOADING_STATUS.fulfilled;
       } else {
         state.loading = LOADING_STATUS.fulfilled;
@@ -61,15 +61,19 @@ export const dataSlice = createSlice({
       state.loading = LOADING_STATUS.pending;
     },
 
-    setChatSlug: (state, { payload }: PayloadAction<string>) => {
-      state.chatSlug = payload;
-      state.messages = [];
-      state.loading = LOADING_STATUS.idle;
+    setSlug: (state, { payload }: PayloadAction<string>) => {
+      if (window) window.localStorage.setItem("slug", payload);
+      if (state.slug !== payload) {
+        state.slug = payload;
+        state.loading = (state.messages[payload] || []).length
+          ? LOADING_STATUS.fulfilled
+          : LOADING_STATUS.idle;
+      }
     },
   },
 });
 
-export const { saveMessages, addMessages, startLoading, setChatSlug } =
+export const { saveMessages, addMessages, startLoading, setSlug } =
   dataSlice.actions;
 
 export const dataReducer = dataSlice.reducer;

@@ -35,7 +35,7 @@ export async function startNewChat(previousState: IChat, formData: FormData) {
     const data1: { data: { attributes: IChatStrapi } } = await res1.json();
 
     if (data1 && data1.data) {
-      return { chatSlug: data1.data.attributes.slug };
+      return { slug: data1.data.attributes.slug };
     } else {
       return { error: "New Chat init error" };
     }

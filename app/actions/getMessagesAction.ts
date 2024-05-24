@@ -1,15 +1,15 @@
 "use server";
 
-import { cleanChatSlug } from "@/functions/cleanChatSlug";
+import { clearSlug } from "@/functions/clearSlug";
 import { IMessageStrapi, IStrapiResponse, TArray } from "@/types";
 
 export async function getMessagesAction(
-  chatSlug: string
+  slug: string
 ): Promise<IStrapiResponse<TArray<IMessageStrapi>>> {
   const res = await fetch(
-    `${
-      process.env.STRAPI_SERVER
-    }/api/messages/?filters[chatSlug][$eq]=${cleanChatSlug(chatSlug)}`,
+    `${process.env.STRAPI_SERVER}/api/messages/?filters[slug][$eq]=${clearSlug(
+      slug
+    )}`,
     {
       method: "GET",
       headers: {

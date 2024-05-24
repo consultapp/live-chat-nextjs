@@ -1,27 +1,23 @@
-import {
-  useChatSlug,
-  useLoadingMessages,
-  useMessageDispatch,
-  useMessages,
-} from "@/context/MessageContext";
 import { UserContext } from "@/context/UserContext";
 import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
 import { useIsConnected } from "../../context/SocketProvider/index";
 import { socket } from "@/socket";
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
 import { getMessagesAction } from "@/actions/getMessagesAction";
+import { useAppDispatch } from "@/store/hooks";
+import { useLoading, useMessages, useSlug } from "@/store/dataSlice/hooks";
 
 type Props = {};
 
 export default function ChatMessages({}: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const dispatch = useMessageDispatch();
+  const dispatch = useAppDispatch();
   const isConnected = useIsConnected();
   const messages = useMessages();
   const { user } = useContext(UserContext);
-  const chatSlug = useChatSlug();
-  const loading = useLoadingMessages();
+  const slug = useSlug();
+  const loading = useLoading();
 
   useEffect(() => {
     if (isConnected) {
@@ -32,26 +28,26 @@ export default function ChatMessages({}: Props) {
   }, [isConnected, dispatch]);
 
   useEffect(() => {
-    if (loading === LOADING_STATUS.idle && chatSlug) {
+    if (loading === LOADING_STATUS.idle && slug) {
       dispatch({ type: "startLoading" });
-      getMessagesAction(chatSlug).then(({ data, error }) => {
+      getMessagesAction(slug).then(({ data, error }) => {
         if (error) {
           console.log("Error:", error);
         } else
           dispatch({
             type: "saveMessages",
-            payload: { data, chatSlug },
+            payload: { data, slug },
           });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatSlug]);
+  }, [slug]);
 
   useEffect(() => {
-    if (chatSlug && isConnected && user.userType === "user") {
-      socket.emit("set-user", chatSlug);
+    if (slug && isConnected && user.userType === "user") {
+      socket.emit("set-user", slug);
     }
-  }, [chatSlug, isConnected, user, user.userType]);
+  }, [slug, isConnected, user, user.userType]);
 
   useLayoutEffect(() => {
     if (ref.current) {

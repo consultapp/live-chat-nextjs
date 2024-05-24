@@ -2,7 +2,7 @@ import USER_TYPE from "@/fixtures/USER_TYPE";
 import { IMessage } from "@/types";
 
 export interface IChat {
-  chatSlug?: string;
+  slug?: string;
   error?: string;
 }
 
@@ -21,7 +21,7 @@ export interface IUser {
 
 export interface INewMessage {
   text: string;
-  chatSlug: string;
+  slug: string;
   userType: string;
 }
 
@@ -37,7 +37,7 @@ export interface IMessageStrapi {
   userType: keyof typeof USER_TYPE;
   createdAt: string;
   updatedAt: string;
-  chatSlug: string;
+  slug: string;
 }
 
 type TArray<T> = { id: number; attributes: T }[];
@@ -62,7 +62,7 @@ export interface IStrapiResponse<T> {
 }
 
 export interface IAddMessages {
-  chatSlug?: string;
+  slug: string;
   messages?: IMessage[];
   error?: string;
 }
