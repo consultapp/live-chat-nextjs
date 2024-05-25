@@ -5,7 +5,7 @@ import { cleanUserType } from "@/functions/cleanUserType";
 import { clearSlug } from "@/functions/clearSlug";
 import { IAddMessages, IMessageStrapi, IStrapiResponse, TOne } from "@/types";
 
-export async function addMessageAction(data: FormData): Promise<IAddMessages> {
+export async function sendMessageAction(data: FormData): Promise<IAddMessages> {
   const slug = clearSlug(data.get("slug"));
   const text = cleanMessage((data.get("text") ?? "") as string);
   const userType = cleanUserType(data.get("userType" ?? "") as string);
@@ -21,7 +21,7 @@ export async function addMessageAction(data: FormData): Promise<IAddMessages> {
   });
 
   if (res.status !== 200) {
-    return { error: "Add Message:" + res.statusText };
+    return { error: "Send Message Error:" + res.statusText };
   }
 
   const result: IStrapiResponse<TOne<IMessageStrapi>> = await res.json();
@@ -36,5 +36,5 @@ export async function addMessageAction(data: FormData): Promise<IAddMessages> {
         },
       ],
     };
-  } else return {  error: "Add Message Error" };
+  } else return { error: "Send Message Data Error" };
 }

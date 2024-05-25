@@ -3,7 +3,7 @@
 import { clearSlug } from "@/functions/clearSlug";
 import { IAddMessages, IMessageStrapi, IStrapiResponse, TArray } from "@/types";
 
-export async function getMessagesAction(slug: string): Promise<IAddMessages> {
+export async function loadMessagesAction(slug: string): Promise<IAddMessages> {
   const res = await fetch(
     `${
       process.env.STRAPI_SERVER
@@ -17,7 +17,7 @@ export async function getMessagesAction(slug: string): Promise<IAddMessages> {
   );
 
   if (res.status !== 200) {
-    console.log("getMessagesAction:", res);
+    console.log("loadMessagesAction:", res);
     return {
       error: res.statusText,
     };
@@ -25,7 +25,6 @@ export async function getMessagesAction(slug: string): Promise<IAddMessages> {
 
   const { data, error }: IStrapiResponse<TArray<IMessageStrapi>> =
     await res.json();
-  console.log("data111", data);
   if (error) {
     return { error: error.message };
   }

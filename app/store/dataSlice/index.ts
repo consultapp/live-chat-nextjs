@@ -1,14 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import {
-  IAddMessages,
-  IMessage,
-  IMessageStrapi,
-  IStrapiResponse,
-  TArray,
-} from "@/types";
+import { IAddMessages, IMessage } from "@/types";
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
-import { socket } from "@/socket";
 
 interface IDataState {
   slug: string;
@@ -31,7 +24,6 @@ export const dataSlice = createSlice({
     addMessages: (state, { payload }: PayloadAction<IAddMessages>) => {
       const { messages = [] } = payload;
       messages.forEach((message) => {
-        console.log("message", message);
         if (!state.messageIds.includes(message.id)) {
           if (!(message.chatSlug in state.messages))
             state.messages[message.chatSlug] = [];

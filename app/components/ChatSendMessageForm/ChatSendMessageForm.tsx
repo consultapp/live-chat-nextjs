@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "@/context/UserContext";
 import { socket } from "@/socket";
 import { useIsConnected } from "@/context/SocketProvider";
-import { addMessageAction } from "@/actions/addMessageAction";
+import { sendMessageAction } from "@/actions/sendMessageAction";
 import { IAddMessages } from "@/types";
 import { addMessages } from "@/store/dataSlice";
 import { useAppDispatch } from "@/store/hooks";
@@ -43,22 +43,21 @@ export default function ChatSendMessageForm({}: Props) {
           e.preventDefault();
           if (inputRef?.current?.value && formRef?.current) {
             if (inputRef?.current?.value.length > 0) {
-              addMessageAction(new FormData(formRef.current)).then(
-                (req: IAddMessages) => {
-                  if (req && !req.error && isConnected) {
-                    socket.emit("new-messages", req);
-                    dispatch(addMessages(req));
+              sendMessageAction(new FormData(formRef.current)).then(
+                (res: IAddMessages) => {
+                  if (res && !res.error && isConnected) {
+                    socket.emit("new-messages", res);
+                    dispatch(addMessages(res));
                     if (inputRef?.current) {
                       inputRef.current.value = "";
                       inputRef.current.focus();
                     }
                   } else {
-                    console.log(req.error);
+                    console.log(res.error);
                   }
                   setSending(false);
                 }
               );
-
               setSending(true);
 
               return;

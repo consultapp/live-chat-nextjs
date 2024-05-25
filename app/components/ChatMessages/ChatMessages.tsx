@@ -2,7 +2,7 @@ import { UserContext } from "@/context/UserContext";
 import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
 import { useIsConnected } from "../../context/SocketProvider/index";
 import { socket } from "@/socket";
-import { getMessagesAction } from "@/actions/getMessagesAction";
+import { loadMessagesAction } from "@/actions/loadMessagesAction";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useLoading, useMessages, useSlug } from "@/store/dataSlice/hooks";
 import { addMessages, startLoading } from "@/store/dataSlice";
@@ -22,17 +22,16 @@ export default function ChatMessages({}: Props) {
   const ifLoadMessages = useAppSelector(selectDataIfLoadMessages);
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && !socket.hasListeners("add-messages"))
       socket.on("add-messages", (data) => {
-        dispatch({ type: "addMessages", payload: { ...data } });
+        dispatch(addMessages(data));
       });
-    }
   }, [isConnected, dispatch]);
 
   useEffect(() => {
     if (ifLoadMessages) {
       dispatch(startLoading());
-      getMessagesAction(slug).then((data) => {
+      loadMessagesAction(slug).then((data) => {
         if (data.error) {
           console.log("Error:", data.error);
         } else {
