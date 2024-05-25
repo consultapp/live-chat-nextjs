@@ -47,12 +47,22 @@ export default function LoginForm({}: Props) {
               placeholder="E-mail"
               className="p-1 rounded"
               name="email"
+              value={
+                process.env.NODE_ENV !== "production"
+                  ? (process.env.MANAGER_EMAIL as string)
+                  : ""
+              }
             />
             <input
               type="password"
               placeholder="Пароль"
               className="p-1 rounded"
               name="password"
+              value={
+                process.env.NODE_ENV !== "production"
+                  ? (process.env.MANAGER_PASSWORD as string)
+                  : ""
+              }
             />
             {state.error && (
               <label className=" text-red-500">{state.error}</label>

@@ -12,17 +12,22 @@ export default function ChatList({}: Props) {
   const dispatch = useAppDispatch();
   const [chats, setChats] = useState<IChatListElement[]>([]);
 
-  useEffect(() => {
+  const updateChatList = () =>
     getChatsAction().then(({ data }) => {
       if (data && data.length) {
         setChats(data.map(({ id, attributes }) => ({ id, ...attributes })));
         dispatch(setSlug(data.at(0)?.attributes?.slug || ""));
       }
     });
-  }, [setChats, dispatch]);
+
+  useEffect(() => {
+    updateChatList();
+    setInterval(updateChatList, 5000);
+  }, []);
 
   return (
     <div className="overflow-y-scroll flex flex-col rounded-xl">
+      <button onClick={updateChatList}>Update</button>
       {chats &&
         chats.map(({ slug, userName }) => (
           <button
