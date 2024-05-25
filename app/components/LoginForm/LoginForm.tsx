@@ -47,7 +47,7 @@ export default function LoginForm({}: Props) {
               placeholder="E-mail"
               className="p-1 rounded"
               name="email"
-              value={
+              defaultValue={
                 process.env.NODE_ENV !== "production"
                   ? (process.env.MANAGER_EMAIL as string)
                   : ""
@@ -58,7 +58,7 @@ export default function LoginForm({}: Props) {
               placeholder="Пароль"
               className="p-1 rounded"
               name="password"
-              value={
+              defaultValue={
                 process.env.NODE_ENV !== "production"
                   ? (process.env.MANAGER_PASSWORD as string)
                   : ""
