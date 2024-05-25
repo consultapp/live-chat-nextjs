@@ -14,3 +14,6 @@ export const selectDataLoading = (state: RootState) =>
 
 export const selectDataIsLoading = (state: RootState) =>
   selectData(state).loading === LOADING_STATUS.pending;
+
+export const selectDataIfLoadMessages = (state: RootState) =>
+  !(selectData(state).slug in selectData(state).messages);

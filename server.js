@@ -30,11 +30,11 @@ app.prepare().then(() => {
     //   });
     // }, 5000);
 
-    socket.on("new-message", (data) => {
+    socket.on("new-messages", (data) => {
       if (clientSocketsIds.includes(socket.id)) {
         io.to("admins").emit("add-messages", data);
       } else {
-        clientSockets[data.chatSlug].emit("add-messages", data);
+        clientSockets[data.messages.at(0).chatSlug].emit("add-messages", data);
         adminSockets.forEach(
           (s) => s !== socket && s.emit("add-messages", data)
         );
@@ -48,9 +48,9 @@ app.prepare().then(() => {
       }
     });
 
-    socket.on("set-user", (chatSlug) => {
+    socket.on("set-user", (slug) => {
       if (!clientSocketsIds.includes(socket.id)) {
-        clientSockets[chatSlug] = socket;
+        clientSockets[slug] = socket;
         clientSocketsIds.push(socket.id);
       }
     });

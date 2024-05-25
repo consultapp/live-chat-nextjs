@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { IChatListElement } from "../../types";
-import { useChatSlug, useMessageDispatch } from "@/context/MessageContext";
 import { getChatsAction } from "@/actions/getChatsAction";
+import { useSlug } from "@/store/dataSlice/hooks";
+import { useAppDispatch } from "@/store/hooks";
+import { setSlug } from "@/store/dataSlice";
 
 type Props = {};
 
 export default function ChatList({}: Props) {
-  const chatSlug = useChatSlug();
-  const dispatch = useMessageDispatch();
+  const chatSlug = useSlug();
+  const dispatch = useAppDispatch();
   const [chats, setChats] = useState<IChatListElement[]>([]);
 
   useEffect(() => {
     getChatsAction().then(({ data }) => {
       if (data && data.length) {
         setChats(data.map(({ id, attributes }) => ({ id, ...attributes })));
-        dispatch({
-          type: "setChatSlug",
-          payload: data.at(0)?.attributes.slug,
-        });
+        dispatch(setSlug(data.at(0)?.attributes?.slug || ""));
       }
     });
   }, [setChats, dispatch]);
@@ -32,7 +31,7 @@ export default function ChatList({}: Props) {
               slug === chatSlug && "text-yellow-400"
             } font-bold`}
             onClick={() => {
-              if (dispatch) dispatch({ type: "setChatSlug", payload: slug });
+              if (dispatch) dispatch(setSlug(slug));
             }}
           >
             {userName}

@@ -1,15 +1,13 @@
 "use server";
 
 import { clearSlug } from "@/functions/clearSlug";
-import { IMessageStrapi, IStrapiResponse, TArray } from "@/types";
+import { IAddMessages, IMessageStrapi, IStrapiResponse, TArray } from "@/types";
 
-export async function getMessagesAction(
-  slug: string
-): Promise<IStrapiResponse<TArray<IMessageStrapi>>> {
+export async function getMessagesAction(slug: string): Promise<IAddMessages> {
   const res = await fetch(
-    `${process.env.STRAPI_SERVER}/api/messages/?filters[slug][$eq]=${clearSlug(
-      slug
-    )}`,
+    `${
+      process.env.STRAPI_SERVER
+    }/api/messages/?filters[chatSlug][$eq]=${clearSlug(slug)}`,
     {
       method: "GET",
       headers: {
@@ -21,15 +19,23 @@ export async function getMessagesAction(
   if (res.status !== 200) {
     console.log("getMessagesAction:", res);
     return {
-      error: {
-        status: res.status,
-        name: "Error",
-        message: res.statusText,
-        details: {},
-      },
-      data: null,
+      error: res.statusText,
     };
   }
 
-  return await res.json();
+  const { data, error }: IStrapiResponse<TArray<IMessageStrapi>> =
+    await res.json();
+  console.log("data111", data);
+  if (error) {
+    return { error: error.message };
+  }
+
+  return {
+    messages: (data || []).map(
+      ({ id, attributes }: { id: number; attributes: any }) => ({
+        id,
+        ...attributes,
+      })
+    ),
+  };
 }

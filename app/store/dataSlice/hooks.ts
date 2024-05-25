@@ -6,7 +6,7 @@ import {
 } from "./selectors";
 
 export const useMessages = () => {
-  return useAppSelector(selectDataMessages);
+  return useAppSelector(selectDataMessages) || [];
 };
 
 export const useSlug = () => {

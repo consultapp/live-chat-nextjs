@@ -21,7 +21,7 @@ export default function ChatNewForm({}: Props) {
     } else if (state?.error) {
       setError("Ошибка создания чата. Свяжитесь с администратором.");
     }
-  }, [state]);
+  }, [state, dispatch]);
 
   return (
     <div className={`flex flex-col justify-center items-center h-full gap-3 `}>

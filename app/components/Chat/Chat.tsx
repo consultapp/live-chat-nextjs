@@ -27,8 +27,8 @@ export default function Chat({}: Props) {
       >
         {slug ? (
           <>
-            {/* <ChatMessages /> */}
-            {/* <ChatSendMessageForm /> */}
+            <ChatMessages />
+            <ChatSendMessageForm />
           </>
         ) : (
           user.userType === USER_TYPE.user && <ChatNewForm />

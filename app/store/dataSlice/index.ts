@@ -8,16 +8,19 @@ import {
   TArray,
 } from "@/types";
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
+import { socket } from "@/socket";
 
 interface IDataState {
   slug: string;
   messages: Record<string, IMessage[]>;
+  messageIds: number[];
   loading: keyof typeof LOADING_STATUS;
 }
 
 const initialState: IDataState = {
   slug: "",
   messages: {},
+  messageIds: [],
   loading: LOADING_STATUS.idle,
 };
 
@@ -25,36 +28,18 @@ export const dataSlice = createSlice({
   name: "data",
   initialState,
   reducers: {
-    saveMessages: (
-      state,
-      {
-        payload,
-      }: PayloadAction<
-        IStrapiResponse<TArray<IMessageStrapi>> & { slug: string }
-      >
-    ) => {
-      state.messages[payload.slug] =
-        payload.data?.map(
-          ({ id, attributes }: { id: number; attributes: any }) => ({
-            id,
-            ...attributes,
-          })
-        ) || [];
-      state.loading = LOADING_STATUS.fulfilled;
-      state.slug = payload.slug;
-    },
-
     addMessages: (state, { payload }: PayloadAction<IAddMessages>) => {
-      const { messages = [], slug } = payload;
-      if (
-        state.messages[slug].at(-1)?.id !== messages.at(-1)?.id &&
-        state.slug === slug
-      ) {
-        state.messages[slug].push(...messages);
-        state.loading = LOADING_STATUS.fulfilled;
-      } else {
-        state.loading = LOADING_STATUS.fulfilled;
-      }
+      const { messages = [] } = payload;
+      messages.forEach((message) => {
+        console.log("message", message);
+        if (!state.messageIds.includes(message.id)) {
+          if (!(message.chatSlug in state.messages))
+            state.messages[message.chatSlug] = [];
+          state.messages[message.chatSlug].push(message);
+          state.messageIds.push(message.id);
+        }
+      });
+      state.loading = LOADING_STATUS.fulfilled;
     },
 
     startLoading: (state) => {
@@ -73,7 +58,6 @@ export const dataSlice = createSlice({
   },
 });
 
-export const { saveMessages, addMessages, startLoading, setSlug } =
-  dataSlice.actions;
+export const { addMessages, startLoading, setSlug } = dataSlice.actions;
 
 export const dataReducer = dataSlice.reducer;

@@ -37,7 +37,7 @@ export interface IMessageStrapi {
   userType: keyof typeof USER_TYPE;
   createdAt: string;
   updatedAt: string;
-  slug: string;
+  chatSlug: string;
 }
 
 type TArray<T> = { id: number; attributes: T }[];
@@ -62,7 +62,6 @@ export interface IStrapiResponse<T> {
 }
 
 export interface IAddMessages {
-  slug: string;
   messages?: IMessage[];
   error?: string;
 }

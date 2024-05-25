@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { MessageContextDispatch, useChatSlug } from "@/context/MessageContext";
 import { UserContext } from "@/context/UserContext";
 import { socket } from "@/socket";
 import { useIsConnected } from "@/context/SocketProvider";
 import { addMessageAction } from "@/actions/addMessageAction";
 import { IAddMessages } from "@/types";
+import { addMessages } from "@/store/dataSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { useSlug } from "@/store/dataSlice/hooks";
 
 type Props = {};
 
@@ -14,9 +16,9 @@ export default function ChatSendMessageForm({}: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const isConnected = useIsConnected();
-  const chatSlug = useChatSlug();
+  const slug = useSlug();
   const { user } = useContext(UserContext);
-  const dispatch = useContext(MessageContextDispatch);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
@@ -32,7 +34,7 @@ export default function ChatSendMessageForm({}: Props) {
         ref={inputRef}
         placeholder="Введите текст"
       />
-      <input type="hidden" name="chatSlug" value={chatSlug} />
+      <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="userType" value={user.userType} />
       <button
         className=" px-1 btn"
@@ -42,16 +44,16 @@ export default function ChatSendMessageForm({}: Props) {
           if (inputRef?.current?.value && formRef?.current) {
             if (inputRef?.current?.value.length > 0) {
               addMessageAction(new FormData(formRef.current)).then(
-                (data: IAddMessages) => {
-                  if (data && !data.error && isConnected) {
-                    socket.emit("new-message", data);
-                    dispatch({ type: "addMessages", payload: data });
+                (req: IAddMessages) => {
+                  if (req && !req.error && isConnected) {
+                    socket.emit("new-messages", req);
+                    dispatch(addMessages(req));
                     if (inputRef?.current) {
                       inputRef.current.value = "";
                       inputRef.current.focus();
                     }
                   } else {
-                    console.log(data.error);
+                    console.log(req.error);
                   }
                   setSending(false);
                 }
