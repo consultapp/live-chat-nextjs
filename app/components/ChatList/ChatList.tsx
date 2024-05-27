@@ -38,7 +38,7 @@ export default function ChatList({}: Props) {
 
   return (
     <>
-      <h1 className="self-center font-bold text-xl">
+      <h1 className="self-center font-bold text-xl flex justify-center">
         Chats
         <button onClick={updateChatList}>
           <SvgLoading className="pl-2 pt-1" />

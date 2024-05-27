@@ -60,20 +60,23 @@ export default function ChatSendMessageForm({}: Props) {
         type="text"
         name="text"
         disabled={sending}
-        className="flex-grow px-2  bg-white"
+        className="flex-grow px-2  bg-white rounded"
         ref={inputRef}
         placeholder="Введите текст"
       />
       <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="userType" value={user.userType} />
       <button
-        className=" px-1 btn w-14 flex justify-center"
+        className="btn px-1 w-14 flex justify-center"
         disabled={sending}
         onClick={clickHandler}
       >
-        {sending ? <SvgLoading /> : <SvgPaperPlane />}
+        {sending ? (
+          <SvgLoading rotating={true} width={20} height={20} />
+        ) : (
+          <SvgPaperPlane />
+        )}
       </button>
-      <SvgLoading rotating={true} width={30} height={30} />
     </form>
   );
 }

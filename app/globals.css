@@ -30,5 +30,5 @@ body {
 }
 
 .btn {
-  @apply bg-gray-800 hover:bg-gray-700 active:bg-gray-600 text-white rounded py-2 px-3 disabled:bg-gray-300;
+  @apply bg-gray-800 hover:bg-gray-700 active:bg-gray-600 text-white rounded py-2 px-3 disabled:bg-gray-600;
 }
