@@ -21,6 +21,15 @@ const config: Config = {
       maxHeight: {
         screen1: "calc(100vh - 2.5rem)",
       },
+      keyframes: {
+        rotate: {
+          "0%": { transform: "rotate(0deg)", transformOrigin: "center" },
+          "100%": { transform: "rotate(360deg)", transformOrigin: "center" },
+        },
+      },
+      animation: {
+        rotate: "rotate 1s linear infinite",
+      },
     },
   },
   plugins: [],

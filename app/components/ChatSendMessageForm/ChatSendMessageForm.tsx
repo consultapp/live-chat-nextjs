@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import { UserContext } from "@/context/UserContext";
 import { socket } from "@/socket";
 import { useIsConnected } from "@/context/SocketProvider";
 import { sendMessageAction } from "@/actions/sendMessageAction";
-import { IAddMessages, IMessage } from "@/types";
+import { IAddMessages } from "@/types";
 import { addMessages } from "@/store/dataSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { useSlug } from "@/store/dataSlice/hooks";
-import { askChatGpt } from "@/actions/askChatGpt";
+import SvgLoading from "@/components/Svg/SvgLoading";
+import SvgPaperPlane from "@/components/Svg/SvgPaperPlane";
 
 type Props = {};
 
@@ -21,9 +22,37 @@ export default function ChatSendMessageForm({}: Props) {
   const { user } = useContext(UserContext);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (inputRef.current) inputRef.current.focus();
-  });
+  const clickHandler = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      if (inputRef?.current?.value && formRef?.current) {
+        if (inputRef?.current?.value.length > 0) {
+          setSending(true);
+
+          sendMessageAction(new FormData(formRef.current)).then(
+            (res: IAddMessages) => {
+              if (res && res.messages && isConnected) {
+                socket.emit("new-messages", res);
+                dispatch(addMessages(res.messages));
+              } else {
+                console.log(res.error);
+              }
+              setSending(false);
+            }
+          );
+          inputRef.current.value = "";
+          inputRef.current.focus();
+
+          return;
+        }
+        // setError("Имя должно быть от 3 до 30 символов");
+        return;
+      }
+      // setError("Введите корректное имя.");
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputRef, formRef]
+  );
 
   return (
     <form className="flex flex-row  p-2  gap-2 mx-4 " ref={formRef}>
@@ -38,63 +67,13 @@ export default function ChatSendMessageForm({}: Props) {
       <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="userType" value={user.userType} />
       <button
-        className=" px-1 btn"
+        className=" px-1 btn w-14 flex justify-center"
         disabled={sending}
-        onClick={(e) => {
-          e.preventDefault();
-          if (inputRef?.current?.value && formRef?.current) {
-            if (inputRef?.current?.value.length > 0) {
-              sendMessageAction(new FormData(formRef.current)).then(
-                (res: IAddMessages) => {
-                  if (res && !res.error && isConnected) {
-                    socket.emit("new-messages", res);
-                    dispatch(addMessages(res.messages as IMessage[]));
-                    // if (res?.messages?.at(0)) {
-                    //   askChatGpt(res.messages.at(0) as IMessage);
-                    // }
-                  } else {
-                    console.log(res.error);
-                  }
-                  setSending(false);
-                }
-              );
-              inputRef.current.value = "";
-              inputRef.current.focus();
-              setSending(true);
-
-              return;
-            }
-            // setError("Имя должно быть от 3 до 30 символов");
-            return;
-          }
-          // setError("Введите корректное имя.");
-        }}
+        onClick={clickHandler}
       >
-        <svg
-          fill="#FFFFFF"
-          height="20px"
-          width="40px"
-          version="1.1"
-          id="Capa_1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 495.003 495.003"
-        >
-          <g id="XMLID_51_">
-            <path
-              id="XMLID_53_"
-              d="M164.711,456.687c0,2.966,1.647,5.686,4.266,7.072c2.617,1.385,5.799,1.207,8.245-0.468l55.09-37.616
-		l-67.6-32.22V456.687z"
-            />
-            <path
-              id="XMLID_52_"
-              d="M492.431,32.443c-1.513-1.395-3.466-2.125-5.44-2.125c-1.19,0-2.377,0.264-3.5,0.816L7.905,264.422
-		c-4.861,2.389-7.937,7.353-7.904,12.783c0.033,5.423,3.161,10.353,8.057,12.689l125.342,59.724l250.62-205.99L164.455,364.414
-		l156.145,74.4c1.918,0.919,4.012,1.376,6.084,1.376c1.768,0,3.519-0.322,5.186-0.977c3.637-1.438,6.527-4.318,7.97-7.956
-		L494.436,41.257C495.66,38.188,494.862,34.679,492.431,32.443z"
-            />
-          </g>
-        </svg>
+        {sending ? <SvgLoading /> : <SvgPaperPlane />}
       </button>
+      <SvgLoading rotating={true} width={30} height={30} />
     </form>
   );
 }
