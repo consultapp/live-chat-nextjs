@@ -1,6 +1,7 @@
 "use server";
 import OpenAI from "openai";
 import { IMessage, IAddMessages } from "@/types";
+import USER_TYPE from "@/fixtures/USER_TYPE";
 
 const openai = new OpenAI();
 
@@ -8,7 +9,10 @@ export async function askChatGpt(message: IMessage): Promise<IAddMessages> {
   const completion = await openai.chat.completions.create({
     messages: [
       {
-        role: message.userType !== "ai" ? message.userType : "user",
+        role:
+          message.userType === USER_TYPE.user
+            ? USER_TYPE.user
+            : USER_TYPE.assistant,
         content: message.text,
       },
     ],
