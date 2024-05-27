@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IAddMessages, IMessage } from "@/types";
+import { ISendMessages, IMessage } from "@/types";
 import LOADING_STATUS from "@/fixtures/LOADING_STATUS";
 
 interface IDataState {

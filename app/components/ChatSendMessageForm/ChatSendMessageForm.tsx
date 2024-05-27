@@ -3,7 +3,7 @@ import { UserContext } from "@/context/UserContext";
 import { socket } from "@/socket";
 import { useIsConnected } from "@/context/SocketProvider";
 import { sendMessageAction } from "@/actions/sendMessageAction";
-import { IAddMessages } from "@/types";
+import { ISendMessages } from "@/types";
 import { addMessages } from "@/store/dataSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { useSlug } from "@/store/dataSlice/hooks";
@@ -30,7 +30,7 @@ export default function ChatSendMessageForm({}: Props) {
           setSending(true);
 
           sendMessageAction(new FormData(formRef.current)).then(
-            (res: IAddMessages) => {
+            (res: ISendMessages) => {
               if (res && res.messages && isConnected) {
                 socket.emit("new-messages", res);
                 dispatch(addMessages(res.messages));

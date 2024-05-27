@@ -3,14 +3,17 @@
 import { cleanMessage } from "@/functions/cleanMessage";
 import { cleanUserType } from "@/functions/cleanUserType";
 import { clearSlug } from "@/functions/clearSlug";
-import { IAddMessages, IMessageStrapi, IStrapiResponse, TOne } from "@/types";
+import { ISendMessages, IMessageStrapi, IStrapiResponse, TOne } from "@/types";
 
-export async function sendMessageAction(data: FormData): Promise<IAddMessages> {
+export async function sendMessageAction(
+  data: FormData
+): Promise<ISendMessages> {
   const slug = clearSlug(data.get("slug"));
   const text = cleanMessage((data.get("text") ?? "") as string);
   const userType = cleanUserType(data.get("userType" ?? "") as string);
 
   if (!slug) return { error: "No such chat." };
+  if (!text) return { error: "Пустое сообщение." };
 
   const res = await fetch(process.env.STRAPI_SERVER + "/api/messages/", {
     method: "POST",

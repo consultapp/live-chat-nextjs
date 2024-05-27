@@ -1,9 +1,14 @@
 "use server";
 
 import { clearSlug } from "@/functions/clearSlug";
-import { IAddMessages, IMessageStrapi, IStrapiResponse, TArray } from "@/types";
+import {
+  ISendMessages,
+  IMessageStrapi,
+  IStrapiResponse,
+  TArray,
+} from "@/types";
 
-export async function loadMessagesAction(slug: string): Promise<IAddMessages> {
+export async function loadMessagesAction(slug: string): Promise<ISendMessages> {
   const res = await fetch(
     `${
       process.env.STRAPI_SERVER

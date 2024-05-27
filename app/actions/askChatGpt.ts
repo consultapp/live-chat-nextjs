@@ -1,11 +1,11 @@
 "use server";
 import OpenAI from "openai";
-import { IMessage, IAddMessages } from "@/types";
+import { IMessage, ISendMessages } from "@/types";
 import USER_TYPE from "@/fixtures/USER_TYPE";
 
 const openai = new OpenAI();
 
-export async function askChatGpt(message: IMessage): Promise<IAddMessages> {
+export async function askChatGpt(message: IMessage): Promise<ISendMessages> {
   const completion = await openai.chat.completions.create({
     messages: [
       {

@@ -13,7 +13,8 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useLoading, useMessages, useSlug } from "@/store/dataSlice/hooks";
 import { addMessages, startLoading } from "@/store/dataSlice";
 import { selectDataIfLoadMessages } from "@/store/dataSlice/selectors";
-import { IAddMessages, IMessage } from "@/types";
+import { ISendMessages, IMessage } from "@/types";
+import USER_TYPE from "@/fixtures/USER_TYPE";
 
 type Props = {};
 
@@ -28,7 +29,7 @@ export default function ChatMessages({}: Props) {
   const ifNeedToLoadMessages = useAppSelector(selectDataIfLoadMessages);
 
   const handleAddMessages = useCallback(
-    (data: IAddMessages) => {
+    (data: ISendMessages) => {
       if (data.messages) {
         dispatch(addMessages(data.messages));
         return;
@@ -88,7 +89,8 @@ export default function ChatMessages({}: Props) {
               } `}
             >
               {new Date(item.createdAt).toLocaleTimeString()}&nbsp;
-              {new Date(item.createdAt).toLocaleDateString()}
+              {new Date(item.createdAt).toLocaleDateString()}&nbsp;
+              {item.userType !== USER_TYPE.user ? item.userType : ""}
             </div>
           </div>
         </div>

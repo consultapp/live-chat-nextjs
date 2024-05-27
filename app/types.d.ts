@@ -61,7 +61,7 @@ export interface IStrapiResponse<T> {
   };
 }
 
-export interface IAddMessages {
+export interface ISendMessages {
   messages?: IMessage[];
   error?: string;
 }
