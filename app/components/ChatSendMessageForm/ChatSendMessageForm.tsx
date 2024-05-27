@@ -3,10 +3,11 @@ import { UserContext } from "@/context/UserContext";
 import { socket } from "@/socket";
 import { useIsConnected } from "@/context/SocketProvider";
 import { sendMessageAction } from "@/actions/sendMessageAction";
-import { IAddMessages } from "@/types";
+import { IAddMessages, IMessage } from "@/types";
 import { addMessages } from "@/store/dataSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { useSlug } from "@/store/dataSlice/hooks";
+import { askChatGpt } from "@/actions/askChatGpt";
 
 type Props = {};
 
@@ -47,24 +48,24 @@ export default function ChatSendMessageForm({}: Props) {
                 (res: IAddMessages) => {
                   if (res && !res.error && isConnected) {
                     socket.emit("new-messages", res);
-                    dispatch(addMessages(res));
-                    if (inputRef?.current) {
-                      inputRef.current.value = "";
-                      inputRef.current.focus();
-                    }
+                    dispatch(addMessages(res.messages as IMessage[]));
+                    // if (res?.messages?.at(0)) {
+                    //   askChatGpt(res.messages.at(0) as IMessage);
+                    // }
                   } else {
                     console.log(res.error);
                   }
                   setSending(false);
                 }
               );
+              inputRef.current.value = "";
+              inputRef.current.focus();
               setSending(true);
 
               return;
-            } else {
-              // setError("Имя должно быть от 3 до 30 символов");
-              return;
             }
+            // setError("Имя должно быть от 3 до 30 символов");
+            return;
           }
           // setError("Введите корректное имя.");
         }}

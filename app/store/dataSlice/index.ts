@@ -21,9 +21,8 @@ export const dataSlice = createSlice({
   name: "data",
   initialState,
   reducers: {
-    addMessages: (state, { payload }: PayloadAction<IAddMessages>) => {
-      const { messages = [] } = payload;
-      messages.forEach((message) => {
+    addMessages: (state, { payload }: PayloadAction<IMessage[]>) => {
+      payload.forEach((message) => {
         if (!state.messageIds.includes(message.id)) {
           if (!(message.chatSlug in state.messages))
             state.messages[message.chatSlug] = [];
@@ -31,11 +30,25 @@ export const dataSlice = createSlice({
           state.messageIds.push(message.id);
         }
       });
-      state.loading = LOADING_STATUS.fulfilled;
+    },
+
+    addMessage: (state, { payload }: PayloadAction<IMessage>) => {
+      if (!state.messageIds.includes(payload.id)) {
+        if (!(payload.chatSlug in state.messages))
+          state.messages[payload.chatSlug] = [];
+        state.messages[payload.chatSlug].push(payload);
+        state.messageIds.push(payload.id);
+      }
     },
 
     startLoading: (state) => {
       state.loading = LOADING_STATUS.pending;
+    },
+    fulfullLoading: (state) => {
+      state.loading = LOADING_STATUS.fulfilled;
+    },
+    rejectLoading: (state) => {
+      state.loading = LOADING_STATUS.rejected;
     },
 
     setSlug: (state, { payload }: PayloadAction<string>) => {

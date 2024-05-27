@@ -9,6 +9,7 @@ import ChatListElements from "../ChatListElements/ChatListElements";
 type Props = {};
 
 export default function ChatList({}: Props) {
+  const t = useRef<ReturnType<typeof setInterval> | null>(null);
   const dispatch = useAppDispatch();
   const [chats, setChats] = useState<IChatListElement[]>([]);
 
@@ -31,7 +32,9 @@ export default function ChatList({}: Props) {
 
   useEffect(() => {
     updateChatList();
-  }, []);
+    if (!t.current) t.current = setInterval(updateChatList, 5000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateChatList]);
 
   return (
     <>

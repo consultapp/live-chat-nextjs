@@ -1,5 +1,11 @@
 import { UserContext } from "@/context/UserContext";
-import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import { useIsConnected } from "../../context/SocketProvider/index";
 import { socket } from "@/socket";
 import { loadMessagesAction } from "@/actions/loadMessagesAction";
@@ -7,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useLoading, useMessages, useSlug } from "@/store/dataSlice/hooks";
 import { addMessages, startLoading } from "@/store/dataSlice";
 import { selectDataIfLoadMessages } from "@/store/dataSlice/selectors";
+import { IAddMessages, IMessage } from "@/types";
 
 type Props = {};
 
@@ -18,26 +25,29 @@ export default function ChatMessages({}: Props) {
   const messages = useMessages();
   const { user } = useContext(UserContext);
   const slug = useSlug();
-  const loading = useLoading();
-  const ifLoadMessages = useAppSelector(selectDataIfLoadMessages);
+  const ifNeedToLoadMessages = useAppSelector(selectDataIfLoadMessages);
+
+  const handleAddMessages = useCallback(
+    (data: IAddMessages) => {
+      if (data.messages) {
+        dispatch(addMessages(data.messages));
+        return;
+      }
+      console.log("Error:", data.error);
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     if (isConnected && !socket.hasListeners("add-messages"))
-      socket.on("add-messages", (data) => {
-        dispatch(addMessages(data));
-      });
-  }, [isConnected, dispatch]);
+      socket.on("add-messages", handleAddMessages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected]);
 
   useEffect(() => {
-    if (ifLoadMessages) {
+    if (ifNeedToLoadMessages) {
       dispatch(startLoading());
-      loadMessagesAction(slug).then((data) => {
-        if (data.error) {
-          console.log("Error:", data.error);
-        } else {
-          dispatch(addMessages(data));
-        }
-      });
+      loadMessagesAction(slug).then(handleAddMessages);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);

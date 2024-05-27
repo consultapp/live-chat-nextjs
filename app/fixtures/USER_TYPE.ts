@@ -1,7 +1,7 @@
 const USER_TYPE = {
   user: "user",
   manager: "manager",
-  ai: "ai",
+  assistant: "assistant",
 } as const;
 
 export default USER_TYPE;
