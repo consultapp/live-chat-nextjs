@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { useSlug } from "@/store/dataSlice/hooks";
 import SvgLoading from "@/components/Svg/SvgLoading";
 import SvgPaperPlane from "@/components/Svg/SvgPaperPlane";
+import { askChatGpt } from "@/actions/askChatGpt";
 
 type Props = {};
 
@@ -34,6 +35,7 @@ export default function ChatSendMessageForm({}: Props) {
               if (res && res.messages && isConnected) {
                 socket.emit("new-messages", res);
                 dispatch(addMessages(res.messages));
+                askChatGpt(res.messages[0]);
               } else {
                 console.log(res.error);
               }
